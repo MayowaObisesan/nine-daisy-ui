@@ -1,11 +1,29 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useRouteLoaderData } from "react-router-dom";
+import useTokenData from "../hooks/useTokenData";
+import { deleteUserTokens, deviceWidthEnum } from "../helpers/utils";
+import { useDeviceSize } from "../hooks/useDeviceSize";
+import { Avatar } from "./Elements";
 
 const NavBar = ({ header, showAddAppButton = false, showSearch, showProfile, hideVerifiedButton, children }) => {
-    const isLoggedIn = false;
+    // const isLoggedIn = false;
+    const { me } = useRouteLoaderData("root");
+    const tokenData = useTokenData();
+    const accessToken = window.localStorage.getItem('nine_login');
+    const size = useDeviceSize();
+
+    const navigate = useNavigate();
+    console.log(tokenData);
+
+    const logout = () => {
+        deleteUserTokens()
+        // Refresh the page to delete stale states and data
+        navigate(0);
+    }
+
     return (
-        <section className="navbar bg-base-100">
+        <section className="navbar sticky top-0 z-[100] h-20 bg-white dark:bg-base-300">
             <div className="flex-1">
-                <Link to={"/"} className="btn btn-ghost normal-case text-xl">{header || "UI"}</Link>
+                <Link to={"/"} className="btn btn-ghost normal-case text-xl">{header || "Nine"}</Link>
             </div>
             <div className="flex-none gap-2">
                 {/*<div className="form-control">*/}
@@ -19,28 +37,67 @@ const NavBar = ({ header, showAddAppButton = false, showSearch, showProfile, hid
                 }
 
                 <div className="dropdown dropdown-end">
-                    <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+                    {/* <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                         <div className="w-10 rounded-full">
                             {
-                                isLoggedIn
+                                tokenData?.isLoggedIn
                                     ? <img src="/images/stock/photo-1534528741775-53994a69daeb.jpg" />
                                     : <div className={"btn btn-circle"}></div>
                             }
                         </div>
+                    </label> */}
+                    <label tabIndex={0} htmlFor="profile-dropdown">
+                        <Avatar
+                            src={tokenData.dp}
+                            alt={"Profile"}
+                            width={12}
+                            classes={"btn border-0 bg-neutral hover:bg-accent transition-colors"}
+                        >
+                            {
+                                tokenData?.isLoggedIn &&
+                                <div className={""}>MO</div>
+                            }
+                        </Avatar>
                     </label>
-                    <ul tabIndex={0} className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
-                        <li>
-                            <a className="justify-between p-3">
-                                Profile
-                                <span className="badge">New</span>
-                            </a>
+                    <ul id="profile-dropdown" tabIndex={0} className="mt-3 z-[1] p-2 menu menu-sm dropdown-content bg-white/85 backdrop-blur-md lg:backdrop-blur-xl dark:bg-base-200 rounded-box w-56">
+                        {
+                            tokenData?.isLoggedIn
+                                ? <>
+                                    <li>
+                                        <Link to={"/profile"} className="justify-between p-4">
+                                            Profile
+                                            <span className="badge">New</span>
+                                        </Link>
+                                        <Link to={"/"} className="justify-between p-4" onClick={logout}>Logout</Link>
+                                    </li>
+                                </>
+                                : <>
+                                    <li>
+                                        <Link to={"/signup"} className="justify-start space-x-3 p-4">Signup</Link>
+                                        {/* <div className={"divider divider-base-300"}></div> */}
+                                        <Link to={"/login"} className="justify-start space-x-3 p-4">Login</Link>
+                                    </li>
+                                </>
+                        }
+                        <div className={"divider my-1"}></div>
+                        <li><Link to={"/about"} className={"p-4"}>About</Link></li>
+                        <li><Link to={"/terms"} className={"p-4"}>Terms of Service</Link></li>
+                        <li><Link to={"/privacy"} className={"p-4"}>Privacy</Link></li>
+                        <div className={"divider my-1"}></div>
+                        <li className={"font-bold text-error hover:bg-error/30 rounded-xl transition-colors"}>
+                            <Link to={"/"} className="justify-start p-4" onClick={logout}>Logout</Link>
                         </li>
-                        <li><a className={"p-3"}>Settings</a></li>
-                        <li><a className={"p-3"}>Logout</a></li>
                     </ul>
                 </div>
-                <div className="divider divider-horizontal"></div>
-                <Link to={"new"} className="btn btn-success">List your App</Link>
+                {
+                    showAddAppButton && (size.windowWidth >= deviceWidthEnum.laptop)
+                        ? <>
+                            <div className="divider divider-horizontal"></div>
+                            <Link to={"/new"} className="btn btn-primary">List your App</Link>
+                        </>
+                        : <Link to={"/new"} className="fixed right-8 top-initial bottom-8 z-100 h-8 line-height-8 radius2 cursor-pointer font-semibold shadow:0px-0px-16px-4px-73C088 decoration-none dark:shadow-unset btn btn-primary">List your Apps</Link>
+                }
+                {children}
             </div>
         </section>
     )
