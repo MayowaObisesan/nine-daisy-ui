@@ -1,5 +1,5 @@
-import {useEffect, useState} from "react";
-import {decodeToken} from "./decodeToken";
+import { useEffect, useState } from "react";
+import { decodeToken } from "../helpers/decodeToken";
 // import {atom, useRecoilState} from "recoil";
 
 // export const tokenState = atom({
@@ -28,13 +28,13 @@ const useTokenData = () => {
         isLoggedIn ? setTokenData(JSON.parse(decodeToken(loginToken))) : setTokenData(null);
 
         // setTokenDataStore({rawToken, isLoggedIn, tokenData})
-        return () => {}
+        return () => { }
     }, [isLoggedIn]);
 
     // console.log(tokenData)
     // setTokenDataStore({rawToken, isLoggedIn, tokenData})
     // console.log(tokenDataStore);
-    return {rawToken, isLoggedIn, tokenData};
+    return { rawToken, isLoggedIn, tokenData };
     // return tokenDataStore;
 }
 

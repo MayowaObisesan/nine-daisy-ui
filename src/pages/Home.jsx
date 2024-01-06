@@ -1,9 +1,10 @@
 import { Link, useNavigation } from "react-router-dom";
 import { useCallback, useEffect, useRef, useState } from "react";
-import useTokenData from "../helpers/tokenData";
+import useTokenData from "../hooks/useTokenData";
 import NavBar from "../components/NavBar";
 import { ListApps } from "../pages/loaders/appLoaders";
 import HomeCarousel from "../components/HomeCarousel";
+import LatestApps from "../components/LatestApps";
 
 export async function appLoader() {
     const apps = await ListApps();
@@ -82,7 +83,7 @@ function Home() {
     };
 
     return (
-        <div className="flex flex-col flex-nowrap w-inherit vh:h-screen font-sans" ref={scrollContainerRef}>
+        <div className="flex flex-col flex-nowrap w-inherit h-screen font-sans dark:bg-base-300 overflow-y-auto" ref={scrollContainerRef}>
             {/* {navigation.state === "loading" && <PageLoader />} */}
             <NavBar showAddAppButton={true} />
             {
@@ -101,7 +102,19 @@ function Home() {
             <HomeCarousel />
             {/*<InstallPWA />*/}
             {/*<HomeBanner />*/}
-            {/*<LatestAppsFragment listCount={latestAppsCount} fetchData={handleFetchData} fetchMoreData={fetchMoreLatestApps}></LatestAppsFragment>*/}
+            {/* <div>If you have a platform where you can showcase your apps. Apps you are working on or apps that you have completed. Will you like to use it?
+                If yes, then visit Nine.
+
+                <div>
+                    Nine is a platform where you can showcase apps that you are building or that you have built. Either as a company or as an individual.
+                    No more hassle when companies or clients wants to know what you have built. They just come to Nine and they find your work.
+                </div>
+
+                <div>You can even find collaborators on your ongoing projects on Nine.</div>
+
+                <div>It's that amazing.</div>
+            </div> */}
+            <LatestApps listCount={latestAppsCount} fetchData={handleFetchData} fetchMoreData={fetchMoreLatestApps}></LatestApps>
 
             {/* <ScrollRestoration /> */}
             {/* <Outlet /> */}

@@ -1,6 +1,6 @@
 import { Outlet, ScrollRestoration, useNavigation } from "react-router-dom";
 import { getProfile } from "../pages/loaders/appLoaders";
-import { PageLoader } from "../helpers/elements";
+import { PageLoader } from "../components/Elements";
 import React from "react";
 
 export async function loader() {

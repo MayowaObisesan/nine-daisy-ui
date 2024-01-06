@@ -9,6 +9,13 @@ export const deleteUserTokens = () => {
     localStorage.removeItem("nine_refresh");
 }
 
+export const deviceWidthEnum = {
+    "desktop": 1200,
+    "laptop": 992,
+    "tablet": 768,
+    "phone": 600
+}
+
 /*export const Logout = () => {
     const navigate = useNavigate();
 
@@ -23,7 +30,7 @@ export const deleteUserTokens = () => {
 }*/
 
 
-export function truncate_letters(text, start, stop) {
+export function truncateLetters(text, start, stop) {
     try {
         // consoler.innerHTML += "truncate_letters";
         start = Number(start);

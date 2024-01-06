@@ -1,6 +1,7 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Nine",
+  "name": "Nine App",
+  "description": "Nine is a platform for developers to showcase their apps, products and software to others.",
   "icons": [
     {
       "src": "favicon.ico",
@@ -8,18 +9,68 @@
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
+      "src": "nine192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
+      "src": "nine512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
   ],
+  "shortcuts": [
+    {
+      "name": "Open Terms & Condition",
+      "short_name": "Terms",
+      "description": "Go to the Terms and Conditions page",
+      "url": "/terms?utm_source=terms",
+      "icons": [
+        {
+          "src": "/static/privacy.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Open Privacy Policy",
+      "short_name": "Privacy Policy",
+      "description": "Go to the Privacy policy page",
+      "url": "/privacy?utm_source=privacy",
+      "icons": [
+        {
+          "src": "/static/privacy.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Create New App",
+      "short_name": "New App",
+      "description": "Create a new app on Nine",
+      "url": "/new?utm_source=new",
+      "icons": [
+        {
+          "src": "/static/new.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Search Apps",
+      "short_name": "Search App",
+      "description": "Search for apps on Nine",
+      "url": "/search?utm_source=search",
+      "icons": [
+        {
+          "src": "/static/search2.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
+  "theme_color": "#ffffff",
   "background_color": "#ffffff"
 }
