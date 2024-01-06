@@ -29,7 +29,7 @@ export async function ListApps() {
             // 'Origin': '*',
             // 'Authorization': `Bearer ${window.localStorage.getItem('nine_login')}`
         },
-        modes: 'no-cors',  // options: cors, no-cors, same-origin
+        modes: 'cors',  // options: cors, no-cors, same-origin
         cache: 'default',   // options: default, no-store, reload, no-cache, force-cache, only-if-cached
     }
     await axios(`${process.env.REACT_APP_BASE_URL}/app/`, fetch_config)

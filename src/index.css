@@ -1,10 +1,92 @@
 * {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: auto;
+  /* | grayscale*/
+  /* font-family: "system-ui" */
+  --scrollbar_color: #EEEEEE;
+  --scrollbar_color_dark: transparent;
+  --scrollbar_width: 4px;
+  --scrollbar_width_small: 4px;
+  --scrollbar_height: 4px;
+  --scrollbar_height_mobile: 4px;
+  --scrollbar_height_small: 1px;
+  --scrollbar_thumb_color: #D7D7D7;
+  --scrollbar_thumb_color_dark: #444444;
+  --scrollbar_thumb_radius: 0px;
+  --scrollbar_track_color: #F3F3F3;
+  --scrollbar_track_color_dark: transparent;
+  --scrollbar_track_radius: 0px;
+}
+
+*::-webkit-scrollbar {
+  width: var(--scrollbar_width, 8px);
+  height: 100%;
+  min-height: var(--scrollbar_height, 8px);
+  /* For horizontal scrollbar to display. */
+  max-height: var(--scrollbar_height, 8px);
+  /* For horizontal scrollbar to display. */
+  background-color: var(--scrollbar_color, #EEEEEE);
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: var(--scrollbar_thumb_radius, 0px);
+  background-color: var(--scrollbar_thumb_color, #D7D7D7);
+}
+
+*::-webkit-scrollbar-track {
+  border-radius: var(--scrollbar_track_radius, 0px);
+  background-color: var(--scrollbar_track_color, #F3F3F3);
+}
+
+@media (min-width: 1024px) {}
+
+@media (min-width: 1024px) {
+  *::-webkit-scrollbar {
+    width: var(--scrollbar_width_small, 4px);
+    height: 100%;
+    min-height: var(--scrollbar_height_small, 1px);
+    /* For horizontal scrollbar to display. */
+    max-height: var(--scrollbar_height_small, 2px);
+    /* For horizontal scrollbar to display. */
+    background-color: var(--scrollbar_color, #EEEEEE);
+  }
+}
+
+
+/* @media (min-width: 1024px) and (prefers-color-scheme: dark) { */
+@media (prefers-color-scheme: dark) {
+  *::-webkit-scrollbar {
+    background: var(--scrollbar_color_dark);
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar_thumb_color_dark, #414141);
+  }
+
+  *::-webkit-scrollbar-track {
+    /* background-color: var(--scrollbar_track_color_dark, #121714); */
+    background-color: var(--scrollbar_track_color_dark, transparent);
+  }
+}
+
+*::-webkit-scrollbar-track-piece {}
+
+*::-webkit-scrollbar-corner {}
+
+*::-webkit-resizer {}
+
+
+* {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: "Assistant", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -14,4 +96,163 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+
+.next-page-animation {
+  position: fixed;
+  top: 0;
+  z-index: 10000;
+  display: block;
+  background: pink;
+  background: rgba(250, 250, 250, .8);
+  width: 100%;
+  height: 100vh;
+  /* opacity: .4; */
+  /* backdrop-filter: blur(2px); */
+}
+
+
+.next-page-animation::before {
+  border-radius: 100px;
+  position: fixed;
+  top: 0;
+  left: 1%;
+  content: "";
+  width: 98%;
+  margin: 4px auto;
+  height: 2px;
+  /* background: linear-gradient(45deg, limegreen, dodgerblue, pink); */
+  /* background: linear-gradient(45deg, dodgerblue, pink); */
+  background: linear-gradient(45deg, dodgerblue, deepskyblue, mediumseagreen);
+  /* background: linear-gradient(45deg, gold, limegreen); */
+  opacity: 1;
+  animation: next-page-animation-color 0.8s linear infinite alternate both;
+  transition: animation .4s linear;
+}
+
+.next-page-animation::after {
+  position: fixed;
+  display: block;
+  width: 100%;
+  height: 100vh;
+  background: pink;
+}
+
+@keyframes next-page-animation-color {
+  0% {
+    /* background: linear-gradient(45deg, dodgerblue, pink); */
+    width: 0%;
+  }
+
+  100% {
+    /* background: linear-gradient(45deg, pink, dodgerblue); */
+    width: 100%;
+  }
+}
+
+/* INPUT FIELD STYLING */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: background-color 9999s ease-in-out 0s;
+  background-color: whitesmoke;
+  -webkit-text-fill-color: #000 !important;
+  caret-color: #27CE8E;
+}
+
+@media (prefers-color-scheme: dark) {
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    transition: background-color 9999s ease-in-out 0s;
+    background-color: whitesmoke;
+    -webkit-text-fill-color: whitesmoke !important;
+    caret-color: #27CE8E;
+  }
+
+  /* .phone_input {
+    background: #222425 !important;
+  }
+
+  .phone_input input[type="tel"] {
+    background: #222425 !important;
+    color: whitesmoke;
+  }
+
+  .phone_input select {
+    background: #222425;
+    color: whitesmoke;
+  } */
+}
+
+/* ANCHOR STYLES */
+a:-webkit-any-link:active {
+  color:
+}
+
+a:focus {
+  outline: 0;
+}
+
+/* For touchscreens */
+@media (hover: hover) {
+  a:hover {
+    outline: 0;
+  }
+}
+
+/* NINE ACCENT COLORS - September 20, 2023. */
+* {
+  --default_nine_theme_blue_color: blue;
+}
+
+.nine-blue-color {
+  color: var(--default_nine_theme_blue_color);
+}
+
+.nine-blue-bg {
+  background-color: var(--default_nine_theme_blue_color);
+}
+
+
+@media (prefers-color-scheme: dark) {
+  body {
+    /*background: #222425;*/
+    background: #111314;
+  }
+
+  .next-page-animation {
+    background: rgba(20, 20, 20, .8)
+  }
+
+  * {
+    --default_nine_theme_blue_color: mediumblue;
+  }
+
+  .nine-blue-color {
+    color: var(--default_nine_theme_blue_color);
+  }
+
+  .nine-blue-bg {
+    background-color: var(--default_nine_theme_blue_color);
+  }
+}
+
+.nine-home-carousel {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 100%),
+    radial-gradient(100% 1056.25% at 0% 0%, #f7e5f0 0%, #eeebff 20.44%, #d2dfff 100%);
+}
+
+@media (prefers-color-scheme: dark) {
+  .nine-home-carousel {
+    background: linear-gradient(180deg, rgba(20, 20, 20, 0.5) 0%, rgba(20, 20, 20, 0) 100%),
+      radial-gradient(100% 1056.25% at 0% 0%, #171520 0%, #1e1b2f 20.44%, #121936 100%);
+    /* background: initial; */
+    /* opacity: 40%; */
+    /* filter: hue-rotate(60deg); */
+  }
 }
