@@ -1,5 +1,29 @@
-import React from "react";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { StyleProcessor } from "../helpers/StyleProcessor";
+
+export const GenerateStrongPasswordButton = ({ text, classes, onClick, children }) => {
+    return (
+        <Button
+            className={`btn btn-sm btn-ghost rounded-lg dark:hover:bg-base-100 mt-1 ${classes}`}
+            onClick={onClick}
+        >
+            {text || "Generate strong password?"}
+            {children}
+        </Button>
+    )
+}
+
+export const RevealPasswordButton = ({ classes, onClick }) => {
+    return (
+        <button
+            type={"button"}
+            className={`fa fa-eye absolute right-1 size-14 leading-[56px] rounded-xl hover:bg-base-200 text-center cursor-pointer ${classes}`}
+            onClick={onClick}
+        >
+        </button>
+    )
+}
 
 export const LoadingButton = ({ children }) => {
     return (
@@ -95,7 +119,7 @@ export const Button = (props) => {
     )
 }
 
-export const TextInput = (props) => {
+export const TextInput = forwardRef((props, ref) => {
     return (
         <input
             id={props.id}
@@ -106,14 +130,32 @@ export const TextInput = (props) => {
             onChange={props.onChange}
             onFocus={props.onFocus}
             onBlur={props.onBlur}
-            ref={props.ref}
+            ref={ref}
             className={`${props.classes + " "}input w-full h-16 focus:outline-primary focus:border-transparent`}
             {...props}
         />
     )
-}
+});
 
-export const TextArea = (props) => {
+export const PasswordInput = forwardRef((props, ref) => {
+    // const inputPasswordField = useRef(null);
+
+    const toggleShowPassword = (e) => {
+        ref.current.getAttribute("type") === "password"
+            ? ref.current.setAttribute("type", "text")
+            : ref.current.setAttribute("type", "password")
+        new StyleProcessor(e.target).toggleClass('fa-eye').toggleClass('fa-eye-slash')
+    }
+
+    return (
+        <div className={"relative flex flex-row items-center"}>
+            <TextInput {...props} ref={ref} />
+            {props.passwordLength > 0 ? <RevealPasswordButton onClick={toggleShowPassword} /> : null}
+        </div>
+    )
+});
+
+export const TextArea = forwardRef((props, ref) => {
     return (
         <textarea
             id={props.id}
@@ -123,12 +165,12 @@ export const TextArea = (props) => {
             onChange={props.onChange}
             onFocus={props.onFocus}
             onBlur={props.onBlur}
-            ref={props.ref}
+            ref={ref}
             className={`${props.classes + " "}textarea resize-none w-full h-28 py-4 focus:outline-primary focus:border-transparent`}
             {...props}
         />
     )
-}
+});
 
 export function FormInput(props) {
     // const handleChange = (event) => {
@@ -219,6 +261,62 @@ export const PageHeaderLink = ({ headerTitle, showArrow, linkUrl, fixTop, noFix,
     );
 }
 
+export const NotifTemplate = ({ title = "Successful", noTitle = false, message, type, children }) => {
+    let bColor;
+    let icon;
+    switch (type.toLowerCase()) {
+        case "success":
+            bColor = "emerald";
+            icon = <svg className="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" /><path d="m9 12 2 2 4-4" /></svg>;
+            break;
+        case "error":
+            bColor = "red";
+            icon = <svg class="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
+            // icon = <svg class="flex-shrink-0 h-4 w-4 mt-0.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>
+            break;
+        case "warning":
+            bColor = "yellow";
+            icon = <svg class="flex-shrink-0 h-4 w-4 mt-0.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" /><path d="M12 9v4" /><path d="M12 17h.01" /></svg>
+            break;
+        case "info":
+            bColor = "blue";
+            icon = <svg class="flex-shrink-0 h-4 w-4 text-blue-600 mt-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 16v-4" /><path d="M12 8h.01" /></svg>
+            break;
+        default:
+            bColor = "gray"
+            icon = <svg class="flex-shrink-0 h-4 w-4 mt-0.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 16v-4" /><path d="M12 8h.01" /></svg>
+    }
+    return (
+        // <div
+        //     className="relative mx-auto text-center w-[64%] px-2 py-2 rounded-xl radius-md bg-success/25 text-success">
+        //     <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        //     {message}
+        //     {children}
+        // </div>
+        <div className={`w-[80%] mx-auto bg-${bColor}-50 border-2 dark:border-0 dark:border-t-2 border-${bColor}-500 rounded-xl my-4 p-4 dark:bg-${bColor}-800/30`} role="alert">
+            <div className={`flex ${noTitle || !title ? "items-center" : "items-start"}`}>
+                <div className="flex-shrink-0">
+                    <span className={`inline-flex justify-center items-center w-8 h-8 rounded-full border-4 border-${bColor}-100 bg-${bColor}-200 text-${bColor}-800 dark:border-${bColor}-900 dark:bg-${bColor}-800 dark:text-${bColor}-400`}>
+                        {icon}
+                    </span>
+                </div>
+                <div className="ms-3">
+                    {
+                        !noTitle
+                        && <h3 className="text-gray-800 font-semibold dark:text-white">
+                            {title}
+                        </h3>
+                    }
+                    <div className="text-sm text-gray-700 dark:text-gray-400">
+                        {message}
+                        {children}
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
 export const NotifSuccess = ({ title = "Successful", noTitle = false, message, children }) => {
     return (
         // <div
@@ -262,7 +360,7 @@ export const NotifError = ({ title = "Error", noTitle = false, message, children
             <div className={`flex ${noTitle || !title ? "items-center" : "items-start"}`}>
                 <div className="flex-shrink-0">
                     <span className="inline-flex justify-center items-center w-8 h-8 rounded-full border-4 border-red-100 bg-red-200 text-red-800 dark:border-red-900 dark:bg-red-800 dark:text-red-400">
-                        <svg className="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" /><path d="m9 12 2 2 4-4" /></svg>
+                        <svg class="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
                     </span>
                 </div>
                 <div className="ms-3">
@@ -280,6 +378,98 @@ export const NotifError = ({ title = "Error", noTitle = false, message, children
             </div>
         </div>
     )
+}
+
+export const NotifWarning = ({ title = "Warning", noTitle = false, message, children }) => {
+    return (
+        <div className="w-[80%] mx-auto bg-yellow-50 border-2 dark:border-0 dark:border-t-2 border-yellow-500 rounded-xl my-4 p-4 dark:bg-yellow-800/30" role="alert">
+            <div className={`flex ${noTitle || !title ? "items-center" : "items-start"}`}>
+                <div className="flex-shrink-0">
+                    <span className="inline-flex justify-center items-center w-8 h-8 rounded-full border-4 border-yellow-100 bg-yellow-200 text-yellow-800 dark:border-yellow-900 dark:bg-yellow-800 dark:text-yellow-400">
+                        <svg class="flex-shrink-0 h-4 w-4 mt-0.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" /><path d="M12 9v4" /><path d="M12 17h.01" /></svg>
+                    </span>
+                </div>
+                <div className="ms-3">
+                    {
+                        !noTitle
+                        && <h3 className="text-gray-800 font-semibold dark:text-white">
+                            {title}
+                        </h3>
+                    }
+                    <div className="text-sm text-gray-700 dark:text-gray-400">
+                        {message}
+                        {children}
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export const NotifInfo = ({ title = "Info", noTitle = false, message, children }) => {
+    return (
+        <div className="w-[80%] mx-auto bg-blue-50 border-2 dark:border-0 dark:border-t-2 border-blue-500 rounded-xl my-4 p-4 dark:bg-blue-800/30" role="alert">
+            <div className={`flex ${noTitle || !title ? "items-center" : "items-start"}`}>
+                <div className="flex-shrink-0">
+                    <span className="inline-flex justify-center items-center w-8 h-8 rounded-full border-4 border-blue-100 bg-blue-200 text-blue-800 dark:border-blue-900 dark:bg-blue-800 dark:text-blue-400">
+                        <svg class="flex-shrink-0 h-4 w-4 text-blue-600 mt-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 16v-4" /><path d="M12 8h.01" /></svg>
+                    </span>
+                </div>
+                <div className="ms-3">
+                    {
+                        !noTitle
+                        && <h3 className="text-gray-800 font-semibold dark:text-white">
+                            {title}
+                        </h3>
+                    }
+                    <div className="text-sm text-gray-700 dark:text-gray-400">
+                        {message}
+                        {children}
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export const NotifDefault = ({ title = "Notice", noTitle = false, message, children }) => {
+    return (
+        <div className="w-[80%] mx-auto bg-red-50 border-2 dark:border-0 dark:border-t-2 border-red-500 rounded-xl my-4 p-4 dark:bg-red-800/30" role="alert">
+            <div className={`flex ${noTitle || !title ? "items-center" : "items-start"}`}>
+                <div className="flex-shrink-0">
+                    <span className="inline-flex justify-center items-center w-8 h-8 rounded-full border-4 border-red-100 bg-red-200 text-red-800 dark:border-red-900 dark:bg-red-800 dark:text-red-400">
+                        <svg class="flex-shrink-0 h-4 w-4 mt-0.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 16v-4" /><path d="M12 8h.01" /></svg>
+                    </span>
+                </div>
+                <div className="ms-3">
+                    {
+                        !noTitle
+                        && <h3 className="text-gray-800 font-semibold dark:text-white">
+                            {title}
+                        </h3>
+                    }
+                    <div className="text-sm text-gray-700 dark:text-gray-400">
+                        {message}
+                        {children}
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export const TemporaryNotif = ({ time, classes, children }) => {
+    const [hideChild, setHideChild] = useState(false);
+    let timeout;
+
+    useEffect(() => {
+        return () => clearTimeout(timeout);
+    }, [hideChild]);
+
+    if (time < 1) return <></>;
+    timeout = setTimeout(() => { console.log('timeout', time); setHideChild(true) }, time);
+
+    return <section className={`${classes}`}>{!hideChild && children}</section>
 }
 
 export const PageLoader = () => {

@@ -159,7 +159,7 @@ const UpdateAppLogo = () => {
                     <Button
                         type={"submit"}
                         classes={"btn-wide block mx-auto disabled:bg-accent disabled:text-primary disabled:opacity-50"}
-                        disabled={appImage}
+                        disabled={!appImage}
                         onClick={showLoadingState}
                     >
                         {isSubmit ? <LoadingButton /> : "Save"}

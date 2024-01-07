@@ -1,3 +1,7 @@
+export const NINE_CREATE_APP_FORM_DRAFT_NAME = "NineAppFormDraft";
+
+export const maxCategoryCount = 4;
+
 export const brandColorMap = {
     "linkedin": "text-blue-700",
     "stack-overflow": "text-orange-600",

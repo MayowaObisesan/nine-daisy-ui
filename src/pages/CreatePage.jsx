@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { StyleProcessor } from "../helpers/StyleProcessor";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Button, LoadingButton, NotifError, NotifSuccess, TextArea, TextInput } from "../components/Elements";
+import { Button, LoadingButton, NotifError, NotifInfo, NotifSuccess, NotifWarning, TemporaryNotif, TextArea, TextInput } from "../components/Elements";
 import useFetch from "../hooks/useFetch";
 import { deviceWidthEnum, isValidURL, loginToken } from "../helpers/utils";
 import axios from 'axios';
@@ -9,6 +9,7 @@ import smoothScrollIntoView from 'smooth-scroll-into-view-if-needed';
 import { useDeviceSize } from '../hooks/useDeviceSize';
 import useTokenData from '../hooks/useTokenData';
 import { FormField, LabelField } from '../components/Forms';
+import { NINE_CREATE_APP_FORM_DRAFT_NAME, maxCategoryCount } from '../helpers/constants';
 
 const PageSwitchHeader = (props) => {
     return (
@@ -73,9 +74,26 @@ const PageSwitchContainer = ({ id, classes, children }) => {
     )
 }
 
+
+const getCreateAppFormDraft = () => {
+    const defaultAppFormDraft = {};
+    let currentDraft = localStorage.getItem(NINE_CREATE_APP_FORM_DRAFT_NAME);
+    if (!currentDraft) {
+        currentDraft = localStorage.setItem(NINE_CREATE_APP_FORM_DRAFT_NAME, JSON.stringify(defaultAppFormDraft));
+    }
+
+    return JSON.parse(currentDraft);
+}
+
+const readCreateAppFormDraft = (key) => {
+    const parsedCurrentDraft = getCreateAppFormDraft();
+    return parsedCurrentDraft ? parsedCurrentDraft[key] : null;
+}
+
+
 function CreateAppsForm() {
     const location = useLocation();
-    const [appCreateData, setAppCreateData] = useState({});
+    const [appCreateData, setAppCreateData] = useState(getCreateAppFormDraft() || {});
     const [app_description_textarea_value, setAppDescriptionValue] = useState();
     const selectedCategoryContainer = useRef(null);
     const { rawToken, isLoggedIn, tokenData } = useTokenData();
@@ -115,6 +133,28 @@ function CreateAppsForm() {
     const [isSubmit, setIsSubmit] = useState(false);
     const size = useDeviceSize();
     const [descriptionCount, setDescriptionCount] = useState(0);
+    const closeCreatePageModal = useRef(null);
+    const [appFormDraft, setAppFormDraft] = useState(getCreateAppFormDraft() || {});
+    const [draftExist, setDraftExist] = useState(false);
+    const [draftPopulated, setDraftPopulated] = useState(false);
+
+    const updateCreateFormDraft = () => {
+        // Save form data to localStorage
+        localStorage.setItem(NINE_CREATE_APP_FORM_DRAFT_NAME, JSON.stringify(appFormDraft));
+        // setTimeout(() => {
+        // }, 800);    // Debounce fetch-storage and write-to-storage time by 800ms
+    }
+
+    const deleteCreateFormDraft = () => {
+        localStorage.removeItem(NINE_CREATE_APP_FORM_DRAFT_NAME);
+    }
+
+    useEffect(() => {
+        // Check if there is a draft currently
+        // const currentDraft = localStorage.getItem(NINE_CREATE_APP_FORM_DRAFT_NAME);
+        // if (currentDraft) setDraftExist(true);
+        if (readCreateAppFormDraft("name")) setDraftExist(true);
+    }, []);
 
     useEffect(() => {
         // scroll the piles into view
@@ -322,6 +362,9 @@ function CreateAppsForm() {
         setAppCreateData(values => (
             { ...values, [name]: value }
         ));
+        setAppFormDraft(values => (
+            { ...values, [name]: value }
+        ));
     }
 
     const handleAppFormPageSwitchTemplate = (pageType) => {
@@ -343,6 +386,7 @@ function CreateAppsForm() {
     const handleAppFormPageSwitch = (evt, pageType) => {
         // setCurrentFormPageIndex(currentFormPageIndex+1);
         handleAppFormPageSwitchTemplate(pageType);
+        updateCreateFormDraft();
     }
 
     const handleAppFormPageSwitchBack = (evt, pageType) => {
@@ -354,6 +398,13 @@ function CreateAppsForm() {
         const name = event.target.name;
         const value = event.target.value;
         setAppCategoryData(values => {
+            if (values.includes(value)) {
+                return values.filter((item) => item !== value);
+            } else {
+                return [...values, value]
+            }
+        });
+        setAppFormDraft(values => {
             if (values.includes(value)) {
                 return values.filter((item) => item !== value);
             } else {
@@ -430,8 +481,55 @@ function CreateAppsForm() {
                         </div>
                         : null
                 }
+                {/* {
+                    draftExist && !draftPopulated &&
+                    <TemporaryNotif time={3000}><NotifWarning message={"We have recovered your previous draft"} /></TemporaryNotif>
+                } */}
+                {/* Open the modal using document.getElementById('ID').showModal() method */}
+                <dialog id="close-create-page-modal" className="modal" ref={closeCreatePageModal}>
+                    <div className="modal-box text-center space-y-6">
+                        <h3 className="relative font-bold text-2xl">
+                            <span className={"absolute top-1 left-2 fa fa-info-circle text-info text-xl"}></span>
+                            <span>Form not submitted</span>
+                        </h3>
+                        <div className="py-4 bg-base-100 rounded-xl text-lg">
+                            {/* You haven't submitted your form. */}
+                            {/* <br /> */}
+                            You will be redirected to the home page.
+                            <div className="">Do you want to Proceed?</div>
+                        </div>
+                        <Link to={"/"} className={""} onClick={() => updateCreateFormDraft()}>
+                            <Button
+                                classes={"btn-primary font-bold text-lg mt-4"}
+                            >
+                                Yes, go to home page
+                            </Button>
+                        </Link>
+                        <div className="modal-action justify-center absolut -top-4 right-2">
+                            <form method="dialog">
+                                {/* if there is a button in form, it will close the modal */}
+                                <button className="btn text-lg">
+                                    {/* <CloseIcon width={"20"} height={"20"} /> */}
+                                    No, Stay on Page
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </dialog>
                 <section className={"sticky top-0 flex flex-row flex-nowrap justify-start items-center w-full max-w-full h-[8%] z-10 bg-base-200 backdrop-blur overflow-x-auto every:flex|flex-column|mg-y1|pad-x4|pad-y2 lg:justify-center lg:overflow-hidden dark:bg-111314 dark:color-whitesmoke"} ref={appFormPagePilesContainer}>
-                    <Link to={"/"} className={"fa fa-arrow-left w-[32px] flex flex-col my-2 px-8 py-4 font-16 decoration-none color-initial lg:absolute lg:left-8 dark:color-whitesmoke"} />
+                    {/* If the user is still creating and clicks the back button, display a modal informing the user that the form will be saved as draft. */}
+                    {
+                        appFormDraft?.name
+                            ? <Button
+                                className={"fa fa-arrow-left w-[32px] flex flex-col my-2 px-8 py-4 font-16 decoration-none color-initial lg:absolute lg:left-8 dark:color-whitesmoke"}
+                                onClick={() => closeCreatePageModal.current.showModal()}
+                            />
+                            : <Link
+                                to={"/"}
+                                className={"fa fa-arrow-left w-[32px] flex flex-col my-2 px-8 py-4 font-16 decoration-none color-initial lg:absolute lg:left-8 dark:color-whitesmoke"}
+                                onClick={() => updateCreateFormDraft()}
+                            />
+                    }
                     {
                         ["Basic", "Logo", "Screenshots", "Category", "Links"].map((eachPile, index) => {
                             return (
@@ -484,7 +582,8 @@ function CreateAppsForm() {
                                             id={"id-app-name"}
                                             name={"name"}
                                             placeholder={"Your app name"}
-                                            value={appCreateData.name || ""}
+                                            defaultValue={appFormDraft.name}
+                                            value={appCreateData.name || appFormDraft.name}
                                             onChange={handleChange}
                                             onKeyUp={checkNameExists}
                                             maxLength={48}
@@ -502,7 +601,9 @@ function CreateAppsForm() {
                                             rows="10"
                                             required={true}
                                             placeholder="Write about your app in few words."
-                                            value={app_description_textarea_value}
+                                            defaultValue={appFormDraft.description}
+                                            // value={app_description_textarea_value}
+                                            value={appFormDraft.description}
                                             onChange={(event) => { handleChange(event); updateDescriptionCount(event) }}
                                             maxLength={120}
                                         />
@@ -555,17 +656,18 @@ function CreateAppsForm() {
                     </PageSwitchContainer>
 
                     <PageSwitchContainer id={"id-screenshots-form"}>
-                        <PageSwitchContentContainer>
+                        <PageSwitchContentContainer classes={"lg:w-full"}>
                             <PageSwitchHeader>Upload Screenshots of your app</PageSwitchHeader>
                             <section className={"pad-y4"}>
                                 {
                                     appScreenshotsPreview.length < 1
                                         ? <label
                                             htmlFor={"id-app-screenshot-upload"}
-                                            className={"flex flex-col justify-center items-center w-[96%] h-[240px] bg-base-100 border-2 border-dashed border-base-100 mx-auto mb-4 rounded-xl text-base-content"}>
+                                            className={"flex flex-col justify-center items-center w-[96%] h-[240px] lg:w-[56%] bg-base-100 hover:bg-base-200 hover:cursor-pointer mx-auto mb-4 rounded-xl text-base-content transition-colors hover:transition-colors"}>
+                                            {/* className={"flex flex-col justify-center items-center w-[96%] h-[160px] pct:w-96 h-160 border:2px_dashed_DDD mx-auto mb-4 rounded-xl bg-base-200 radius color-BBB dark:border:2px_dashed_darkgray"}> */}
                                             <span className="fa fa-plus text-xl py-4"></span>
                                             <div>Select images to upload</div>
-                                            <div>Maximum of 4 images</div>
+                                            <div className={"font-bold leading-normal text-base"}>Maximum of 4 images</div>
                                             <input
                                                 id={"id-app-screenshot-upload"}
                                                 type="file"
@@ -577,15 +679,18 @@ function CreateAppsForm() {
                                             />
                                         </label>
                                         : <section
-                                            className={"flex flex-row flex-wrap justify-around px-2 every:pct:w-48|h-320|mg-b2|bg-lighter|radius-sm"}>
+                                            // className={"flex flex-row flex-wrap justify-around px-2 every:pct:w-48|h-320|mg-b2|bg-lighter|radius-sm"}>
+                                            className={"flex flex-row flex-wrap justify-center gap-4 px-4 every:pct:w-48|h-320|mg-b2|bg-lighter|radius-sm dark:every:bg-222425"}>
                                             {
                                                 appScreenshotsPreview?.map((screenshot_obj, index) => (
                                                     <div key={index}
-                                                        className={"w-[48%] h-[320px] bg-base-100 mb-4 px-2 rounded-lg"}>
+                                                        // className={"w-[48%] h-[320px] bg-base-100 mb-4 px-2 rounded-lg"}>
+                                                        className={"h-[320px] rounded-xl bg-base-200 lg:hover:bg-base-100 transition-colors radius-inherit"}>
                                                         <img src={screenshot_obj}
                                                             alt={`screenshot preview ${index}`}
                                                             height={"100%"}
-                                                            className={"max-w-full object-cover object-center rounded-lg"} />
+                                                            // className={"max-w-full object-cover object-center rounded-lg"} />
+                                                            className={"max-w-full h-full object-cover object-center rounded-xl radius-inherit"} />
                                                     </div>
                                                 ))
                                             }
@@ -594,7 +699,8 @@ function CreateAppsForm() {
                                                     ? new Array(4 - appScreenshotsPreview?.length).fill("").map((_, index) => (
                                                         <label key={index}
                                                             htmlFor={"id-app-screenshot-upload"}
-                                                            className={"flex flex-col justify-center items-center text-center bg-base-100 border-2 border-dashed border-base-100 mx-auto rounded-xl color-999 decoration-none dark:bg-222425 dark:border-2 dark:border-base-100"}>
+                                                            // className={"flex flex-col justify-center items-center text-center bg-base-100 border-2 border-dashed border-base-100 mx-auto rounded-xl color-999 decoration-none dark:bg-222425 dark:border-2 dark:border-base-100"}>
+                                                            className={"flex flex-col justify-center items-center flex-1 min-w-[240px] h-[320px] bg-base-200 lg:hover:bg-base-100 transition-colors text-center border:2px_dashed_DDD mx-auto rounded-xl radius color-999 decoration-none dark:border:2px_dashed_darkgray"}>
                                                             <span className="fa fa-plus text-xl py-4"></span>
                                                             <input
                                                                 id={"id-app-screenshot-upload"}
@@ -625,34 +731,55 @@ function CreateAppsForm() {
                     </PageSwitchContainer>
 
                     <PageSwitchContainer id={"id-category-form"}>
-                        <PageSwitchContentContainer>
+                        <PageSwitchContentContainer classes={"lg:w-full"}>
                             <PageSwitchHeader>Select a category for your App</PageSwitchHeader>
-                            <section id="id-new-app-category-fragment" className={"new-app-category-fragment relative lg:px-4"}>
+                            <section id="id-new-app-category-fragment" className={"new-app-category-fragment relative lg:w-[56%] lg:mx-auto lg:px-4"}>
                                 <div
-                                    className={"sticky top-0 block w-full bg-white backdrop-blur z-1 dark:bg-base-100/40 dark:radius2"}
+                                    className={"sticky top-0 block w-full bg-base-200/80 backdrop-blur px:top-80 d-block pct:w-100 bg-white bg-mica z-10 dark:bg-111314 dark:bg-base-200/80"}
                                     ref={selectedCategoryContainer}>
                                     {
                                         appCategoryData?.map((eachCategory, index) => (
                                             <span key={index} id={`id-category-${index}`}
-                                                className="inline-block h-5 lh-5 pad-x2 mg-x1 mg-y1 radius-round bg-lighter border:1px_solid_BBB font-bold dark:bg-333435|color-whitesmoke dark:border-0">
+                                                className="inline-block h-10 leading-10 px-4 mx-2 my-2 rounded-full bg-base-100 text-base-content radius-round bg-lighter border:1px_solid_BBB font-bold dark:bg-222425|color-whitesmoke|border:1px_solid_darkgray">
                                                 {eachCategory}
                                             </span>
                                         ))
                                     }
                                     {
-                                        defaultAppsCategory &&
-                                        <div className="block absolute top-0 right-4 h-12 leading-[3rem] px-2 text-center font-bold z-100 dark:color-darkgray">
-                                            {selectedCategoryCount} of 4
+                                        defaultAppsCategory && appCategoryData.length > 0 &&
+                                        <div className="block absolute top-1 right-4 h-12 leading-[3rem] px-2 text-center font-bold z-100 dark:color-darkgray">
+                                            <span className={"badge badge-warning badge-lg"}>
+                                                {selectedCategoryCount} of 4
+                                            </span>
                                         </div>
                                     }
                                 </div>
-                                <section className={"relative"} ref={categoryItemsContainer}>
+                                <section className={"relative px-4 lg:px-0"} ref={categoryItemsContainer}>
                                     {
                                         defaultAppsCategory
                                             ? defaultAppsCategory?.map((eachAppsCategory, index) => {
                                                 return (
                                                     <div key={index} className={"relative dark:color-whitesmoke"}>
-                                                        <input
+                                                        <label
+                                                            htmlFor={`id-category-${eachAppsCategory}`}
+                                                            className="flex flex-row items-center h-16 leading-[64px] my-4 px-4 rounded-2xl cursor-pointer hover:bg-base-200 has-[:disabled]:cursor-not-allowed has-[:disabled]:text-base-content/50 has-[:checked]:bg-primary has-[:checked]:text-primary-content has-[:checked]:font-bold has-[:checked]:ring-primary transition-all"
+                                                            data-category_name={eachAppsCategory}
+                                                            data-category_item_selected={false}
+                                                        >
+                                                            <span className={"flex-1 w-full"}>{eachAppsCategory}</span>
+                                                            <input
+                                                                key={index}
+                                                                type="checkbox"
+                                                                name={"category"}
+                                                                id={`id-category-${eachAppsCategory}`}
+                                                                className="appearance-none checked:checkbox checked:checkbox-sm checked:bg-success"
+                                                                // defaultChecked={appData?.category.split(",").includes(eachAppsCategory)}
+                                                                defaultValue={eachAppsCategory}
+                                                                onChange={handleCategoryChange}
+                                                                disabled={!appCategoryData?.includes(eachAppsCategory) && appCategoryData?.length === maxCategoryCount}
+                                                            />
+                                                        </label>
+                                                        {/* <input
                                                             key={index}
                                                             type="checkbox"
                                                             name={"category"}
@@ -668,9 +795,9 @@ function CreateAppsForm() {
                                                             className={"d-block abs top-0 left-0 h-8 lh-8 pad-x3 pad-y-3 border-0 radius2 text-left cursor-pointer peer-checked/sibling-categoryname:text-base-content peer-disabled/sibling-categoryname:text-gray-600 peer-disabled/sibling-categoryname:cursor-not-allowed dark:peer-disabled/sibling-categoryname:text-neutral-content dark:peer-disabled/sibling-categoryname:opacity-40"}
                                                             data-category_name={eachAppsCategory}
                                                             data-category_item_selected={false}
-                                /*onClick={(event) => addToSelectedCategory(event)}*/>
+                                                            onClick={(event) => addToSelectedCategory(event)}>
                                                             {eachAppsCategory}
-                                                        </label>
+                                                        </label> */}
                                                     </div>
                                                 )
                                             })
@@ -752,9 +879,9 @@ function CreateAppsForm() {
                             <div className={"dark:bg-base-300 block ml-auto decoration-none"} tabIndex="-1">
                                 <Button
                                     type={"submit"}
-                                    classes={"btn-success btn-wide h-14 disabled:bg-green-300 disabled:text-success-content disabled:bg-opacity-80"}
+                                    classes={"btn-success btn-wide h-14 disabled:bg-green-300 disabled:text-success-content disabled:bg-opacity-80 dark:disabled:bg-success dark:disabled:text-success-content"}
                                     disabled={!(appLinksValid && tokenData?.is_verified)}
-                                    onClick={showLoadingState}
+                                    onClick={() => { showLoadingState(); deleteCreateFormDraft() }}
                                 >
                                     {isSubmit ? <LoadingButton>Listing...</LoadingButton> : "Create"}
                                 </Button>

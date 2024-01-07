@@ -1,9 +1,11 @@
 import React, { memo, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { NotifError, NotifSuccess } from "../components/Elements";
+import { Button, LoadingButton, NotifError, NotifSuccess, TextInput } from "../components/Elements";
 import { deleteUserTokens, initiateLogin } from "../helpers/utils";
 import axios from 'axios';
 import useTokenData from '../hooks/useTokenData';
+import { AccountPageContainer } from './Login';
+import { FormField, LabelField } from '../components/Forms';
 
 
 const VerifyUserForm = () => {
@@ -157,8 +159,8 @@ const VerifyUserForm = () => {
 
     return (
         <>
-            <form id="id-login-form" onSubmit={handleVerifyUser}
-                className="relative flex flex-column mg-x-auto pad-x1 pad-t2 pct:w-96 radius every:flex|flex-column|mg-y1|pad-y2|font-semibold lg:w-400|shadow:0-2px-12px-0-E8E8E8|pad-x4|pad-t4|pad-b4 dark:b-00030488|shadow-unset">
+            <form id="id-verify-user-form" onSubmit={handleVerifyUser}
+                className="card relative flex flex-col gap-5 mx-auto px-1 w-[96%] md:w-[480px] md:shadow-md lg:shadow:0-2px-12px-0-E8E8E8 lg:shadow-none md:px-8 md:py-8">
                 {
                     verifyUserResponseData?.successful
                         ? <NotifSuccess message={verifyUserResponseData.message} />
@@ -169,7 +171,33 @@ const VerifyUserForm = () => {
                         ? <NotifError message={verifyUserResponseData.message} />
                         : null
                 }
-                <label className="">
+                <FormField>
+                    <LabelField text={"Email"}>
+                        <TextInput
+                            type="email"
+                            name="email"
+                            defaultValue={tokenData?.email}
+                            // value={email || ""}
+                            placeholder="Your email address"
+                            disabled={tokenData?.email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            ref={inputEmailField}
+                        />
+                    </LabelField>
+                </FormField>
+                <FormField>
+                    <LabelField text={"Code"}>
+                        <TextInput
+                            type="text"
+                            name="code"
+                            value={code || ""}
+                            placeholder="Verification code"
+                            onChange={(e) => setCode(e.target.value)}
+                            ref={inputCodeField}
+                        />
+                    </LabelField>
+                </FormField>
+                {/* <label className="">
                     Email
                     <input
                         type="email"
@@ -194,26 +222,35 @@ const VerifyUserForm = () => {
                         ref={inputCodeField}
                         className="pct:w-100 h-8 lh-8 pad-x2 mg-y1 outline:1px_solid_transparent border:1px_solid_lightgray outline-offset-2 focus:outline:2px_solid_gray transition:outline_80ms_ease radius-sm font-12 placeholder:font-regular dark:bg-222425|border:1px_solid_000304|color-whitesmoke dark:focus:outline:3px_solid_444445|bg-333435"
                     />
-                </label>
-                <div>
-                    <button
+                </label> */}
+                <div className={"form-control"}>
+                    {/* <button
                         type="submit"
                         className="d-block pct:w-64 h-7 lh-7 mg-x-auto text-center radius bg-green border-0 color-FFF font-14 font-medium cursor-pointer disabled:bg-green-inverse|cursor-not-allowed"
                         disabled={!(email && code)}
                         onClick={(e) => showLoadingState(e)}
                     >{isSubmit ? <span className='fa fa-spinner fa-spin'></span> : "Submit"}
-                    </button>
+                    </button> */}
+                    <Button
+                        type="submit"
+                        disabled={!(email && code)}
+                        onClick={(e) => showLoadingState(e)}
+                    >
+                        {isSubmit ? <LoadingButton /> : "Submit"}
+                    </Button>
                 </div>
             </form>
-            <div className={"d-block pct:w-72 mg-x-auto mg-y4 border:0px_solid_BBB em:border-t-0.05 lg:w-320|mg-y8|border-DDD dark:border:0px_solid_444445 dark:em:border-t-0.05"}></div>
+            {/* <div className={"d-block pct:w-72 mg-x-auto mg-y4 border:0px_solid_BBB em:border-t-0.05 lg:w-320|mg-y8|border-DDD dark:border:0px_solid_444445 dark:em:border-t-0.05"}></div> */}
             <div
                 className={"pct:w-96 mg-x-auto text-center lg:w-400"}>
                 Didn't get a code?
                 <button
-                    className={"font-bold pad-y2 pad-x1 border-0 bg-transparent color-initial radius decoration-none disabled:color-lightgray hover:bg-light|cursor-pointer dark:color-whitesmoke"}
+                    className={"btn btn-sm btn-ghost rounded-lg disabled:btn-ghost disabled:opacity-80 disabled:hover:cursor-not-allowed dark:hover:bg-base-100 font-bold pad-y2 pad-x1 border-0 bg-transparent color-initial radius decoration-none disabled:color-lightgray hover:bg-light|cursor-pointer dark:color-whitesmoke"}
                     disabled={!email}
                     onClick={resendVerificationCode}
-                >{isResendCodeButtonClicked ? <span className='fa fa-spinner fa-spin'></span> : "Request new code"}</button>
+                >
+                    {isResendCodeButtonClicked ? <LoadingButton /> : "Request new code"}
+                </button>
             </div>
         </>
     )
@@ -222,20 +259,23 @@ const VerifyUserForm = () => {
 
 const VerifyUser = () => {
     return (
-        <div className="relative flex flex-column pct:h-100 pad-y2 lg:justify-center|align-items-center|pad-y4 dark:bg-111314|color-whitesmoke">
-            <Link to={"/"} className="relative text-left font-28 font-black lh-normal mg-b2 pad-l2 decoration-none color-initial lg:mg-b6|text-center dark:color-whitesmoke">
-                Nine
-                {/*<div className={"text-left mg-b4 lh-100 font-14 font-regular"}>All Naija Apps in one place</div>*/}
-            </Link>
-            <div className="text-left mg-b4 pad-l2 font-16 font-semibold lh-normal lg:mg-b0|pad-x-auto|font-15|font-medium">Verify your account</div>
-            {/*<div className="text-center font-28 font-medium lh-normal">Nine</div>*/}
-            <div className={"relative bg-yellow-inverse pad-2 radius text-center lg:w-400"}>
+        <AccountPageContainer header={"Verify your account"}>
+            <div className={"relative bg-base-200 p-4 rounded-xl radius text-center lg:w-400"}>
                 A code has been sent to your mail.
                 <br /> The sent code lasts for 5 minutes
                 <br /> Kindly verify your account using that code.
             </div>
             <VerifyUserForm />
-        </div>
+        </AccountPageContainer>
+        // <div className="relative flex flex-column pct:h-100 pad-y2 lg:justify-center|align-items-center|pad-y4 dark:bg-111314|color-whitesmoke">
+        //     <Link to={"/"} className="relative text-left font-28 font-black lh-normal mg-b2 pad-l2 decoration-none color-initial lg:mg-b6|text-center dark:color-whitesmoke">
+        //         Nine
+        //         {/*<div className={"text-left mg-b4 lh-100 font-14 font-regular"}>All Naija Apps in one place</div>*/}
+        //     </Link>
+        //     <div className="text-left mg-b4 pad-l2 font-16 font-semibold lh-normal lg:mg-b0|pad-x-auto|font-15|font-medium"></div>
+        //     {/*<div className="text-center font-28 font-medium lh-normal">Nine</div>*/}
+
+        // </div>
     );
 };
 

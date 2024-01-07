@@ -27,8 +27,8 @@ const AppList = props => {
 
   if (appsList?.length < 1) {
     return (
-      <section className={"flex flex-col flex-wrap justify-center items-center h-480 pad-y6 lh-6 dark:color-darkgray"}>
-        <div className={"font-14 font-medium lg:font-16"}>No Apps registered on Nine yet.</div>
+      <section className={"flex flex-col flex-wrap justify-center items-center h-[480px] pad-y6 lh-6 dark:color-darkgray"}>
+        <div className={"font-14 font-medium lg:font-16"}>No Apps listed on Nine yet.</div>
         <div className={"font-16 text-center lg:fon-21"}>Be the first to register your app.</div>
       </section>
     )

@@ -12,6 +12,7 @@ import axios from "axios";
 import { useDeviceSize } from "../hooks/useDeviceSize";
 import { deviceWidthEnum } from "../helpers/utils";
 import useTokenData from "../hooks/useTokenData";
+import { maxCategoryCount } from "../helpers/constants";
 
 const UpdateAppCategory = () => {
     const { appId } = useParams();
@@ -31,7 +32,6 @@ const UpdateAppCategory = () => {
     const selectedCategoryContainer = useRef(null);
     const categoryInputField = useRef(null);
     const categoryItemsContainer = useRef(null);
-    const maxCategoryCount = 4;
 
     useEffect(() => {
         const appCategory = appData?.category.length > 0 ? appData?.category.split(",") : [];
