@@ -4,7 +4,7 @@ import Footer from "./Footer";
 import { StyleProcessor } from "../helpers/StyleProcessor";
 import { useDeviceSize } from '../hooks/useDeviceSize';
 import { deviceWidthEnum } from '../helpers/utils';
-import { NotifError, NotifSuccess, TextInput } from '../components/Elements';
+import { Button, LoadingButton, NotifError, NotifSuccess, TextInput } from '../components/Elements';
 import { FormField, LabelField } from '../components/Forms';
 
 
@@ -189,14 +189,22 @@ const LoginForm = () => {
                     </div> */}
                 </div>
                 <div className={"form-control"}>
-                    <button
+                    {/* <button
                         type="submit"
                         className="font-medium btn btn-primary disabled:bg-base-100 disabled:cursor-not-allowed"
                         disabled={!(email && password.length >= 8)}
                         onClick={e => showLoadingState(e)}
                     >
-                        {isSubmit ? <span className='fa fa-spinner fa-spin'></span> : "Submit"}
-                    </button>
+                        {isSubmit ? <LoadingButton /> : "Submit"}
+                    </button> */}
+                    <Button
+                        type="submit"
+                        // className="font-medium btn btn-primary disabled:bg-base-100 disabled:cursor-not-allowed"
+                        disabled={!(email && password.length >= 8)}
+                        onClick={e => showLoadingState(e)}
+                    >
+                        {isSubmit ? <LoadingButton /> : "Submit"}
+                    </Button>
                 </div>
             </form>
             <div className={"md:hidden divider w-11/12 mx-auto"}></div>
@@ -208,20 +216,27 @@ const LoginForm = () => {
     )
 }
 
-
-const Login = () => {
+export const AccountPageContainer = ({ header, classes, children }) => {
     return (
-        <section className={"h-screen bg-base-300"}>
-            <div className="bg-base-300 relative flex flex-col gap-4 h-full mx-auto py-8 md:justify-center md:items-center dark:bg-111314 md:w-[560px] lg:w-[480px]">
+        <section className={`h-dvh dark:bg-base-300 ${classes}`}>
+            <div className="dark:bg-base-300 relative flex flex-col gap-4 h-full mx-auto py-8 md:justify-center md:items-center dark:bg-111314 md:w-[560px] lg:w-[480px]">
                 <div className={"self-start md:self-center mb-8 md:mb-4"}>
                     <Link to={"/"} className="block text-left md:text-center lg:text-center text-xl md:text-2xl font-medium md:font-medium px-4">Nine</Link>
-                    <div className="relative text-3xl md:text-4xl font-black pl-4 md:p-0 decoration-none color-initial md:text-center lg:text-center">Login</div>
+                    <div className="relative text-3xl md:text-4xl font-black pl-4 md:p-0 decoration-none color-initial md:text-center lg:text-center">{header}</div>
                 </div>
                 {/*<div className="text-center font-28 font-medium lh-normal">Nine</div>*/}
-                <LoginForm />
+                {children}
                 {/* <Footer miniDetails={true} /> */}
             </div>
         </section>
+    )
+}
+
+const Login = () => {
+    return (
+        <AccountPageContainer header={"Login"}>
+            <LoginForm />
+        </AccountPageContainer>
     );
 };
 

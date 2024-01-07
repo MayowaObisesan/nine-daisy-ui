@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Button, NotifError, NotifSuccess, TextInput } from "../components/Elements";
+import { Button, LoadingButton, NotifError, NotifSuccess, TextInput } from "../components/Elements";
 import Footer from "./Footer";
 import { StyleProcessor } from '../helpers/StyleProcessor';
 import { useDeviceSize } from '../hooks/useDeviceSize';
@@ -175,8 +175,10 @@ const SignupForm = () => {
                 <div className={"flex flex-col"}>
                     <div className={"flex flex-row flex-nowrap justify-between gap-4"}>
                         <FormField classes={"flex-grow"}>
-                            <LabelField>
-                                Firstname
+                            <LabelField
+                                text={<span className={"font-semibold"}>Firstname</span>}
+                                classes={"font-bold"}
+                            >
                                 <TextInput
                                     type="text"
                                     name="firstname"
@@ -195,8 +197,10 @@ const SignupForm = () => {
                             </LabelField>
                         </FormField>
                         <FormField classes={"flex-grow"}>
-                            <LabelField>
-                                Lastname
+                            <LabelField
+                                text={<span className={"font-semibold"}>Lastname</span>}
+                                classes={"font-bold"}
+                            >
                                 <TextInput
                                     type="text"
                                     name="lastname"
@@ -254,8 +258,10 @@ const SignupForm = () => {
                         </label> */}
                     </div>
                     <FormField>
-                        <LabelField>
-                            Email
+                        <LabelField
+                            text={<span className={"font-semibold"}>Email</span>}
+                            classes={"font-bold"}
+                        >
                             <TextInput
                                 type="email"
                                 name="email"
@@ -274,9 +280,11 @@ const SignupForm = () => {
                         </LabelField>
                     </FormField>
                     <FormField>
-                        <LabelField>
-                            Password
-                            <div className={"relative flex flex-row align-items-center"}>
+                        <LabelField
+                            text={<span className={"font-semibold"}>Password</span>}
+                            classes={"font-bold"}
+                        >
+                            <div className={"relative flex flex-row items-center"}>
                                 <TextInput
                                     type="password"
                                     name="password"
@@ -290,9 +298,9 @@ const SignupForm = () => {
                                     onBlur={(e) => {
                                         setInputPasswordFocused(false)
                                     }}
-                                // ref={inputPasswordField}
+                                    ref={inputPasswordField}
                                 />
-                                {signupData?.password?.length > 0 ? <span className={"fa fa-eye abs px:right-4 square-7 lh-7 radius text-center cursor-pointer dark:bg-11131488"} onClick={toggleShowPassword}></span> : null}
+                                {signupData?.password?.length > 0 ? <span className={"fa fa-eye absolute right-1 size-14 leading-[56px] rounded-xl hover:bg-base-200 px:right-4 square-7 lh-7 radius text-center cursor-pointer dark:bg-11131488"} onClick={toggleShowPassword}></span> : null}
                             </div>
                         </LabelField>
                     </FormField>
@@ -303,7 +311,7 @@ const SignupForm = () => {
                         disabled={!(isEmailValid && isPasswordValid) && (signupData?.firstname < 4 || signupData?.lastname < 4)}
                         onClick={(e) => showLoadingState(e)}
                     >
-                        {isSubmit ? <span className='fa fa-spinner fa-spin'></span> : "Submit"}
+                        {isSubmit ? <LoadingButton /> : "Submit"}
                     </Button>
                     {/* <button type="submit"
                         className="d-block pct:w-64 h-7 lh-7 mg-x-auto text-center radius bg-green border-0 color-FFF font-14 font-medium cursor-pointer disabled:bg-blue-200 disabled:cursor-not-allowed"
@@ -428,8 +436,8 @@ const Signup = () => {
     const size = useDeviceSize();
 
     return (
-        <section className={"flex flex-row items-center h-screen bg-base-300"}>
-            <div className="bg-base-300 relative flex flex-col gap-4 w-full h-full mx-auto py-8 md:justify-center md:items-center md:w-[560px] lg:w-[540px]">
+        <section className={"flex flex-row items-center h-dvh dark:bg-base-300"}>
+            <div className="bg-white dark:bg-base-300 relative flex flex-col gap-4 w-full h-full mx-auto py-8 md:justify-center md:items-center md:w-[560px] lg:w-[540px]">
                 {/*<Link to="/" className="fixed top-2 left-1 square-6 lh-6 lg:top-4|left-4|square-8|lh-8 color-initial text-center font-16 radius-circle z-10"><span className="fa fa-times"></span></Link>*/}
                 <div className={"self-start md:self-center lg:self-start mb-8 md:mb-10"}>
                     <Link to={"/"} className="block text-left md:text-center lg:text-left text-xl md:text-2xl font-medium md:font-medium px-4">Nine</Link>

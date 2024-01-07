@@ -1,7 +1,9 @@
 import React, { memo, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { NotifError, NotifSuccess } from "../components/Elements";
+import { Button, GenerateStrongPasswordButton, LoadingButton, NotifError, NotifInfo, NotifSuccess, PasswordInput, TemporaryNotif, TextInput } from "../components/Elements";
 import useFetch from "../hooks/useFetch";
+import { FormField, LabelField } from '../components/Forms';
+import { AccountPageContainer } from './Login';
 
 
 const ChangePasswordForm = () => {
@@ -15,6 +17,7 @@ const ChangePasswordForm = () => {
     const inputNewPasswordField = useRef(null);
     const [isSubmit, setIsSubmit] = useState(false);
     const [strongPassword] = useFetch(`${process.env.REACT_APP_BASE_URL}/user/generate-strong-password/`)
+    const [isStrongPasswordGenerated, setIsStrongPasswordGenerated] = useState(false);
 
     const showLoadingState = (e) => {
         setIsSubmit(true);
@@ -81,13 +84,14 @@ const ChangePasswordForm = () => {
     const GenerateStrongPassword = () => {
         setNewPassword(strongPassword)
         setConfirmPassword(strongPassword)
+        setIsStrongPasswordGenerated(true);
         return strongPassword;
     };
 
     return (
         <>
-            <form id="id-login-form" onSubmit={handleChangePassword}
-                className="relative flex flex-column mg-x-auto pad-x1 pad-t2 pct:w-96 radius every:flex|flex-column|mg-y1|pad-y2|font-semibold lg:w-400|shadow:0-2px-12px-0-E8E8E8|pad-x4|pad-t4|pad-b4">
+            <form id="id-set-password-form" onSubmit={handleChangePassword}
+                className="card relative flex flex-col gap-5 space-y-5 mx-auto px-1 w-[96%] md:w-[480px] md:shadow-md lg:shadow:0-2px-12px-0-E8E8E8 lg:shadow-none md:px-8 md:py-8">
                 {
                     verifyUserResponseData?.successful
                         ? <NotifSuccess message={verifyUserResponseData.message} />
@@ -98,7 +102,49 @@ const ChangePasswordForm = () => {
                         ? <NotifError message={verifyUserResponseData.message} />
                         : null
                 }
-                <label className="">
+                {
+                    isStrongPasswordGenerated && <TemporaryNotif time={2000} classes={""}><NotifInfo noTitle={true} message={"Strong Password Generated"} /></TemporaryNotif>
+                }
+                <FormField>
+                    <LabelField text={"Email"}>
+                        <TextInput
+                            type="email"
+                            name="email"
+                            value={email || ""}
+                            placeholder="Your email address"
+                            onChange={(e) => setEmail(e.target.value)}
+                            ref={inputEmailField}
+                        />
+                    </LabelField>
+                </FormField>
+                <FormField>
+                    <LabelField text={"New Password"}>
+                        <PasswordInput
+                            type="password"
+                            name="password"
+                            value={newPassword || ""}
+                            placeholder="New password"
+                            onChange={(e) => setNewPassword(e.target.value)}
+                            ref={inputNewPasswordField}
+                            passwordLength={newPassword.length}
+                        />
+                    </LabelField>
+                    <GenerateStrongPasswordButton onClick={GenerateStrongPassword} />
+                </FormField>
+                <FormField>
+                    <LabelField text={"Confirm Password"}>
+                        <PasswordInput
+                            type="password"
+                            name="confirm_password"
+                            value={confirmPassword || ""}
+                            placeholder="Confirm password"
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            ref={inputConfirmPasswordField}
+                            passwordLength={confirmPassword.length}
+                        />
+                    </LabelField>
+                </FormField>
+                {/* <label className="">
                     Email
                     <input
                         type="email"
@@ -140,20 +186,26 @@ const ChangePasswordForm = () => {
                         ref={inputConfirmPasswordField}
                         className="pct:w-100 h-8 lh-8 pad-x2 mg-y1 outline:1px_solid_transparent border:1px_solid_lightgray outline-offset-2 focus:outline:2px_solid_gray transition:outline_80ms_ease radius-sm font-12 placeholder:font-regular"
                     />
-                </label>
-                <div>
-                    {console.log(email, newPassword, confirmPassword)}
-                    <button
+                </label> */}
+                <div className={"form-control"}>
+                    {/* {console.log(email, newPassword, confirmPassword)} */}
+                    {/* <button
                         type="submit"
                         className="d-block pct:w-64 h-7 lh-7 mg-x-auto text-center radius bg-green border-0 color-FFF font-14 font-medium cursor-pointer disabled:bg-green-inverse|cursor-not-allowed"
                         disabled={!(email && newPassword && confirmPassword && (newPassword === confirmPassword))}
                         onClick={(e) => showLoadingState(e)}
                     >{isSubmit ? <span className='fa fa-spinner fa-spin'></span> : "Submit"}
-                    </button>
+                    </button> */}
+                    <Button
+                        type="submit"
+                        disabled={!(email && newPassword && confirmPassword && (newPassword === confirmPassword))}
+                        onClick={(e) => showLoadingState(e)}
+                    >
+                        {isSubmit ? <LoadingButton /> : "Submit"}
+                    </Button>
                 </div>
             </form>
-            <div
-                className={"d-block pct:w-72 mg-x-auto mg-y4 border:0px_solid_BBB em:border-t-0.05 lg:w-320|mg-y8|border-DDD dark:border:0px_solid_444445 dark:em:border-t-0.05"}></div>
+            {/* <div className={"d-block pct:w-72 mg-x-auto mg-y4 border:0px_solid_BBB em:border-t-0.05 lg:w-320|mg-y8|border-DDD dark:border:0px_solid_444445 dark:em:border-t-0.05"}></div> */}
             <div
                 className={"pct:w-96 mg-x-auto text-center lg:w-400"}>
                 Don't have an account? <Link to={"/signup"}
@@ -166,19 +218,9 @@ const ChangePasswordForm = () => {
 
 const ChangePassword = () => {
     return (
-        <div className="relative flex flex-column pct:h-100 pad-y2 lg:justify-center|align-items-center|pad-y4">
-            <Link to={"/"}
-                className="relative text-left font-28 font-black lh-normal mg-b2 pad-l2 decoration-none color-initial lg:mg-b6|text-center">
-                Nine
-                {/*<div className={"text-left mg-b4 lh-100 font-14 font-regular"}>All Naija Apps in one place</div>*/}
-            </Link>
-            <div
-                className="text-left mg-b4 pad-l2 font-16 font-semibold lh-normal lg:mg-b0|pad-x-auto|font-15|font-medium">
-                Set your Password
-            </div>
-            {/*<div className="text-center font-28 font-medium lh-normal">Nine</div>*/}
+        <AccountPageContainer header={"Set your Password"}>
             <ChangePasswordForm />
-        </div>
+        </AccountPageContainer>
     );
 };
 

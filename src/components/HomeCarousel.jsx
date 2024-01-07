@@ -20,11 +20,19 @@ const HomeCarousel = () => {
                     {/* <img src="/images/stock/photo-1625726411847-8cbb60cc71e6.jpg" className="w-full" /> */}
                 </div>
                 <div id="item2" className="flex flex-col justify-center carousel-item w-full">
-                    <CarouselItem subText1={"Showcase your"} mainText={"Portfolio"} subText2={"of apps that you have built"} />
+                    <CarouselItem subText1={"Showcase the"} mainText={"Portfolio"} subText2={"of apps that you have built"} />
                     {/* <img src="/images/stock/photo-1414694762283-acccc27bca85.jpg" className="w-full" /> */}
                 </div>
                 <div id="item3" className="flex flex-col justify-center carousel-item w-full">
-                    <CarouselItem subText1={"List your"} mainText={"Apps"} subText2={"for others to know"} />
+                    <CarouselItem subText1={"List your"} mainText={"Apps"} subText2={"for others to use"} />
+                    {/* <img src="/images/stock/photo-1609621838510-5ad474b7d25d.jpg" className="w-full" /> */}
+                </div>
+                <div id="item3" className="flex flex-col justify-center carousel-item w-full">
+                    <CarouselItem subText1={"Gain easy"} mainText={"Recognition"} subText2={"through your apps"} />
+                    {/* <img src="/images/stock/photo-1609621838510-5ad474b7d25d.jpg" className="w-full" /> */}
+                </div>
+                <div id="item3" className="flex flex-col justify-center carousel-item w-full">
+                    <CarouselItem subText1={"Get"} mainText={"Motivated"} subText2={"by other people's Work"} />
                     {/* <img src="/images/stock/photo-1609621838510-5ad474b7d25d.jpg" className="w-full" /> */}
                 </div>
                 {/* <div id="item4" className="flex flex-col justify-center carousel-item w-full">

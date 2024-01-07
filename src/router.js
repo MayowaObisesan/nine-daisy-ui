@@ -69,7 +69,7 @@ const router = createBrowserRouter(
             <Route id={"setPassword"} path="set-password" element={<SetPassword />} />
             <Route id={"setPasswordSuccess"} path="set-password/success" element={<SetPasswordSuccessful />} />
             <Route id={"changePassword"} path="change-password" element={<ChangePassword />} render={props => <ChangePassword id={props.match.params.id} />} />
-            <Route id={"changePasswordSuccessful"} path="change-password-successful" element={<ChangePasswordSuccessful />} />
+            <Route id={"changePasswordSuccessful"} path="change-password/success" element={<ChangePasswordSuccessful />} />
             <Route id={"search"} path="search" element={<Search />} />
             <Route id={"profile"} path="profile" element={<Profile />} loader={profileLoader} />
             {/*{/*<Route path="profile/update" element={<UpdateProfile/>}/>*/}
