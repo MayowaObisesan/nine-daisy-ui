@@ -187,11 +187,11 @@ export const ProfileBasicDetailsCard = ({ userData }) => {
 
     return (
         <div
-            className={"relative flex flex-col md:flex-row justify-center items-center md:gap-x-10 lg:gap-x-16 flex-basis flex-grow bg-white/60 md:bg-base-100 dark:bg-base-100 py-12 md:px-16 lg:px-24 md:py-24 rounded-2xl overflow-hidden"}>
+            className={"relative flex flex-col md:flex-row justify-start items-center md:gap-x-8 lg:gap-x-4 flex-basis flex-grow bg-white/60 md:bg-base-100 dark:bg-base-200 py-12 md:px-16 lg:px-16 md:py-24 rounded-3xl overflow-hidden"}>
             <Avatar
                 src={userData?.dp}
                 alt={"profile"}
-                classes={"w-24 size-24 leading-[96px] md:size-40 leading-[160px] lg:size-48 lg:leading-[192px] font-bold text-xl lg:text-3xl"}
+                classes={"w-24 size-24 leading-[96px] md:size-40 leading-[160px] lg:size-40 lg:leading-[160px] font-bold text-xl lg:text-3xl bg-gray-200"}
             >
                 {
                     !userData?.dp &&
@@ -370,12 +370,12 @@ export const ProfileBanner = ({ userData, socialSitesList, userApps, removeAbout
                 && <>
                 </>
             }
-            <div className={"flex flex-row justify-start absolute -top-8 left-0 lg:-top-24 -z-1 min-w-[64%] pct:w-120 leading-normal text-base-100/50 color-F8FBF8 text-9xl lg:text-[12rem] font-120 font-bold text-right bg-orange-30 overflow-hidden lg:pct:w-100|neg:top-10|left-5 dark:color-11131466"}>
+            {/* <div className={"flex flex-row justify-start absolute -top-8 left-0 lg:-top-24 -z-1 min-w-[64%] pct:w-120 leading-normal text-base-100/50 color-F8FBF8 text-9xl lg:text-[12rem] font-120 font-bold text-right bg-orange-30 overflow-hidden lg:pct:w-100|neg:top-10|left-5 dark:color-11131466"}>
                 {userData?.firstname}
             </div>
             <div className={"flex flex-row justify-start absolute top-24 left-0 lg:top-24 -z-1 min-w-[64%] pct:w-120 leading-normal text-base-100/60 color-F8F8F8 text-9xl lg:text-[12rem] font-120 font-bold text-right bg-orange-30 overflow-hidden lg:pct:w-100|left-50 dark:color-11131466"}>
                 {userData?.lastname}
-            </div>
+            </div> */}
             {/*Profile Page*/}
             <section className={"relative w-full lg:w-auto lg:min-w-[56%] bg-transparent backdrop-blur-sm rounded-2xl p-4 lg:p-8 space-y-8 lg:left-12 z-[1] overflow-clip"}>
                 {/* Profile banner - Names Card */}

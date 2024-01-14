@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useLoaderData, useNavigation } from 'react-router-dom';
 import { deviceWidthEnum, truncateLetters } from "../helpers/utils";
 import Footer from "./Footer";
@@ -57,6 +57,39 @@ function AppDetailContent(props) {
   // const { size.windowWidth, screenWidth, deviceWidthEnum } = useDeviceWidth();
   const size = useDeviceSize();
   const [userApps] = useFetch(`${process.env.REACT_APP_BASE_URL}/user/${props.owner.id}/apps/`);
+  const [screenshotPreviewImage, setScreenshotPreviewImage] = useState("");
+  const [counter, setCounter] = useState(0);
+
+  useEffect(() => {
+    setScreenshotPreviewImage(props.screenshot[0].image);
+    const screenshotCount = props.screenshot?.length;
+    if (screenshotCount && screenshotCount > 1) {
+      let counter = 0;
+      setInterval(() => {
+        if (counter === screenshotCount) counter = 0;
+        setScreenshotPreviewImage(props.screenshot[counter].image); counter++;
+      }, 8000);
+    }
+  }, [props.screenshot[0].image]);
+
+  // const changeAppBannerScreenshot = useCallback(() => {
+  //   const screenshotCount = props.screenshot?.length;
+  //   // let counter = 0;
+  //   if (counter === screenshotCount) setCounter(0);
+  //   setScreenshotPreviewImage(props.screenshot[counter].image);
+  //   // counter++;
+  //   setCounter((oldCounter) => oldCounter + 1);
+  // }, []);
+
+  // useEffect(() => {
+  //   let interval;
+  //   clearInterval(interval);
+  //   // setScreenshotPreviewImage(props.screenshot[0].image);
+  //   const screenshotCount = props.screenshot?.length;
+  //   if (screenshotCount && screenshotCount > 1) {
+  //     setInterval(changeAppBannerScreenshot, 8000);
+  //   }
+  // }, [props.screenshot[0].image, changeAppBannerScreenshot, counter]);
 
   const OwnerContact = () => {
     return (
@@ -168,57 +201,49 @@ function AppDetailContent(props) {
           ))
         }
       </section>*/}
-      <section
-        className={"fixed top-20 flex flex-row flex-nowrap justify-around w-full h-[200px] z-0 every:text-center|h-240|radius-sm lg:relative lg:top-0 lg:h-[480px] lg:every:h-480"}>
-        {
-          props?.screenshot.length > 0
-            ? props?.screenshot.map((image, index) => (
-              <>
-                <div key={index} className={"w-full h-[240px] mx-auto px-4 rounded-lg lg:h-[480px] lg:px-2"}>
-                  <img src={image.image}
-                    alt={`screenshot preview ${index}`} height={""}
-                    className={"max-w-full w-full h-full object-cover object-center rounded-lg"} />
-                </div>
-                <div className={"absolute bottom-0 w-full bg-transparent"}></div>
-              </>
-            ))
-            : <div className={"relative flex flex-col justify-center items-center w-full leading-normal bg-lighter gradient:to_bottom-whitesmoke-lightgray color-lightgray font-64 font-bold text-center lg:items-start lg:h-[480px] lg:px-[400px] dark:gradient:to_bottom-111314-222425|color-darkgray dark:rounded-none"}>{props.name}</div>
-        }
-      </section>
-      <section className={"w-full mx-auto lg:flex lg:flex-row lg:justify-between lg:items-start lg:w-full lg:px-8 dark:bg-inherit bg-orange-30"}>
+      {
+        size.windowWidth < deviceWidthEnum.laptop &&
         <section
-          className="app-banner-container relative top-[280px] w-full max-w-full overflow-y-auto m-auto bg-white backdrop-blur-md rounded-2xl z-1 shadow:0px--20px-80px-20px-FFFFFF88 lg:top-[40px] lg:neg:top-80 lg:w-[56%] lg:mx-8 lg:ml-aut lg:bg-initial dark:shadow:0px--20px-80px-20px-11131488 dark:bg-base-300 dark:backdrop-blur-0">
-          {/*<img src="" alt="" id="id-app-banner-image" className="app-banner-image"/>*/}
-          {/*<section className="app-primary-details">
-            <div id="id-app-name" className="app-name">{props.name}</div>
-            <div id="id-app-description" className="app-description">{props.description}</div>
-            <div id="id-app-category" className="app-category">
-              {props.category.split(',').map((each_app_category) => {
-                return (<span
-                  className="d-inline-block pad-x2 h-4 lh-4 mg-x1-smt radius-round bg-light font-normal font-10">{each_app_category}</span>)
-              })}
-            </div>
-          </section>*/}
-
-          <section className={"space-y-3 rounded-xl dark:bg-base-300"}>
-            <section className={"relative bg-gray-100 bg-lighter px-0 py-0 rounded-2xl lg:p-2 lg:rounded-2xl dark:bg-base-200 dark:lg:mb-2"}>
-              {
-                /* For mobile, tablet and devices smaller than the laptop */
-                size.windowWidth < deviceWidthEnum.laptop
-                  ? <div className="relative flex flex-row justify-start items-center pt-4 pb-0 px-2 font-bold text-4xl font-21 text-center rounded-xl bg-inherit z-2 dark:color-whitesmoke dark:every:bg-333334|color-whitesmoke">
-                    {
-                      props.logo
-                        ? <img src={props.logo} alt={`${props.name} logo`}
-                          className="block mx-4 my-4 w-16 h-16 bg-light rounded-full radius-circle object-cover object-center dark:bg-333334" />
-                        : <div
-                          className={"relative block mx-4 w-16 h-16 leading-[64px] square-8 lh-8 rounded-full radius-circle border-0 border-DDD border-solid bg-light text-center font-bold cursor-pointer hover:shadow:inset-0px-0px-16px-0px-DDD transition:box-shadow_200ms_ease dark:bg-333334"}>
-                          {props?.name?.split('')[0].toUpperCase().toString()}
-                        </div>
-                    }
-                    {props.name}
+          className={"fixed top-20 flex flex-row flex-nowrap justify-around w-full h-[200px] z-0 every:text-center|h-240|radius-sm lg:relative lg:top-0 lg:h-[480px] lg:every:h-480"}>
+          {
+            props?.screenshot.length > 0
+              ? props?.screenshot.map((image, index) => (
+                <>
+                  <div key={index} className={"w-full h-[240px] mx-auto px-4 rounded-lg lg:h-[480px] lg:px-2"}>
+                    <img src={image.image}
+                      alt={`screenshot preview ${index}`} height={""}
+                      className={"max-w-full w-full h-full object-cover object-center rounded-lg"} />
                   </div>
-                  : null
-              }
+                  <div className={"absolute bottom-0 w-full bg-transparent"}></div>
+                </>
+              ))
+              : <div className={"relative flex flex-col justify-center items-center w-full leading-normal bg-lighter gradient:to_bottom-whitesmoke-lightgray color-lightgray font-64 font-bold text-center lg:items-start lg:h-[480px] lg:px-[400px] dark:gradient:to_bottom-111314-222425|color-darkgray dark:rounded-none"}>{props.name}</div>
+          }
+        </section>
+      }
+      {
+        size.windowWidth >= deviceWidthEnum.laptop &&
+        <section
+          className={"fixed top-20 flex flex-row flex-nowrap items-center justify-around px-16 w-full h-[200px] z-0 every:text-center|h-240|radius-sm lg:relative lg:top-0 lg:h-[600px] lg:every:h-480"}>
+          <section className={"w-[60%] h-[480px]"}>
+            <section className={"relative flex flex-col justify-center bg-gray-10 bg-lighter px-0 py-0 rounded-2xl lg:p-2 lg:rounded-2xl dark:bg-base-200 dark:lg:mb-2"}>
+              {/* {
+              // For mobile, tablet and devices smaller than the laptop
+              size.windowWidth < deviceWidthEnum.laptop
+                ? <div className="relative flex flex-row justify-start items-center pt-4 pb-0 px-2 font-bold text-4xl font-21 text-center rounded-xl bg-inherit z-2 dark:color-whitesmoke dark:every:bg-333334|color-whitesmoke">
+                  {
+                    props.logo
+                      ? <img src={props.logo} alt={`${props.name} logo`}
+                        className="block mx-4 my-4 w-16 h-16 bg-light rounded-full radius-circle object-cover object-center dark:bg-333334" />
+                      : <div
+                        className={"relative block mx-4 w-16 h-16 leading-[64px] square-8 lh-8 rounded-full radius-circle border-0 border-DDD border-solid bg-light text-center font-bold cursor-pointer hover:shadow:inset-0px-0px-16px-0px-DDD transition:box-shadow_200ms_ease dark:bg-333334"}>
+                        {props?.name?.split('')[0].toUpperCase().toString()}
+                      </div>
+                  }
+                  {props.name}
+                </div>
+                : null
+            } */}
               {
                 /* For laptop and larger devices */
                 size.windowWidth >= deviceWidthEnum.laptop
@@ -266,8 +291,7 @@ function AppDetailContent(props) {
                 }
               </div>
             </section>
-
-            <section className="app-download-details rounded-xl bg-base-100 pl-6 dark:bg-base-300 dark:p-0">
+            <section className="app-download-details rounded-xl bg-base-10 pl-6 dark:bg-base-300 dark:p-0">
               {/*<header className={"font-medium"}>{"Download links".toUpperCase()}</header>*/}
               <section
                 className={"flex flex-row justify-start gap-x-4 pt-5 pb-5 empty:pad-0 rounded-lg overflow-x-auto every:w-auto|h-64|radius|text-center|radius-inherit|decoration-none|bg-lighter|color-initial|mg-x1|pad-r4 hover:every:bg-E8E8E8|cursor-pointer dark:bg-inherit|pad-x2 dark:every:bg-333435|color-whitesmoke dark:hover:every:bg-333435"}>
@@ -289,10 +313,10 @@ function AppDetailContent(props) {
                         <div className={"font-semibold"}>{props.playstore_link ? "Google play store" : "-"}</div>
                       </div>
                       {/* {
-                        size.windowWidth <= deviceWidthEnum.laptop
-                          ? <span className={""}>Download</span>
-                          : <span className={""}>Download from Play Store</span>
-                      } */}
+                          size.windowWidth <= deviceWidthEnum.laptop
+                            ? <span className={""}>Download</span>
+                            : <span className={""}>Download from Play Store</span>
+                        } */}
                     </ExternalLink>
                     : null
                 }
@@ -309,10 +333,10 @@ function AppDetailContent(props) {
                         width={"0"}
                         classes={"w-8 rounded-none"} />
                       {/* {
-                        size.windowWidth <= deviceWidthEnum.laptop
-                          ? "Download"
-                          : "Download from AppStore"
-                      } */}
+                          size.windowWidth <= deviceWidthEnum.laptop
+                            ? "Download"
+                            : "Download from AppStore"
+                        } */}
                       <div className="leading-tight text-left">
                         <div className={"text-[15px]"}>Download from</div>
                         <div className={"font-semibold"}>{props.playstore_link ? "Apple AppStore" : "-"}</div>
@@ -341,6 +365,268 @@ function AppDetailContent(props) {
                     : null
                 }
                 {/* {
+                    props.playstore_link !== ""
+                      ? <a href={props.playstore_link}
+                        target={"_blank"}
+                        rel={"noreferrer"}
+                        id="id-app-download-links"
+                        className={"flex flex-row items-center lg:font-13"}>
+                        <span className="fa-brands fa-google-play d-block font-30 pad-t4 pad-b2"></span>
+                        <img
+                          src="/static/playstore.png"
+                          alt={"playstore logo"}
+                          width={"32"}
+                          height={"32"}
+                          className={"mx-2"} />
+                        {"Play Store"}
+                      </a>
+                      : null
+                  }
+                  {
+                    props.appstore_link !== ""
+                      ? <a href={props.appstore_link}
+                        target={"_blank"}
+                        rel={"noreferrer"}
+                        id="id-app-download-links"
+                        className={"flex flex-row items-center lg:font-13"}>
+                        <span className="fa-brands fa-app-store-ios d-block font-30 pad-t4 pad-b2"></span>
+                        <img
+                          src="/static/appstore.png"
+                          alt={"appstore logo"}
+                          width={"32"}
+                          height={"32"}
+                          className={"mx-2"} />
+                        {"App Store"}
+                      </a>
+                      : null
+                  }
+                  {
+                    props.external_link !== ""
+                      ? <a href={props.external_link}
+                        target={"_blank"}
+                        rel={"noreferrer"}
+                        id="id-app-download-links"
+                        className={"flex flex-row items-center lg:font-13"}>
+                        <span className="fa fa-download d-block font-30 pad-t4 pad-b2"></span>
+                        <img
+                          src="/static/download.png"
+                          alt={"download logo"}
+                          width={"32"}
+                          height={"32"}
+                          className={"mx-2"} />
+                        {"Download"}
+                      </a>
+                      : null
+                  } */}
+              </section>
+              {
+                props.external_link
+                  ? <div className={"px-4 pb-2 font-medium dark:color-whitesmoke"}>
+                    {"** This app has an external download link."}
+                  </div>
+                  : null
+              }
+            </section>
+          </section>
+          <section className={"relative flex flex-row flex-nowrap justify-center items-center bg-green-30 gap-4 flex-grow-0 w-[40%] px-12"}>
+            {/* <div aria-hidden="true" class="flex absolute -top-96 start-1/2 transform -translate-x-1/2 z-0">
+            <div class="bg-gradient-to-r from-violet-300/50 to-purple-100 blur- w-[25rem] h-[44rem] rotate-[-60deg] transform -translate-x-[10rem] dark:from-violet-900/50 dark:to-purple-900"></div>
+            <div class="bg-gradient-to-tl from-blue-50 via-blue-100 to-blue-50 blur- w-[90rem] h-[50rem] rounded-fulls origin-top-left -rotate-12 -translate-x-[15rem] dark:from-indigo-900/70 dark:via-indigo-900/70 dark:to-blue-900/70"></div>
+          </div> */}
+            <div className={"absolute w-64 h-72 rounded-xl bg-gradient-to-r from-violet-300/50 to-purple-100 dark:from-violet-900/50 dark:to-purple-900 blur-3xl"}></div>
+            <div className={"flex flex-col bg-white z-[1] dark:bg-base-300"}>
+              <div>
+                <div className={"app-banner-screenshot-preview w-ful h-[240px] px-4 rounded-lg lg:h-[360px] lg:px-2 z-[1]"}>
+                  <img
+                    src={screenshotPreviewImage}
+                    alt={`screenshot preview`}
+                    height={""}
+                    className={"max-w-full w-full h-full object-contain object-center rounded-lg"} />
+                </div>
+              </div>
+              <div className={"flex flex-row justify-center items-center"}>
+                {
+                  props?.screenshot.length > 0
+                    ? props?.screenshot.map((image, index) => (
+                      <>
+                        <div key={index} className={"h-[24px] px-4 rounded-lg lg:h-[36px] lg:px-2 z-[1]"}>
+                          <img src={image.image}
+                            alt={`screenshot preview ${index}`} height={""}
+                            className={"max-w-full w-full h-full object-contain object-center rounded-lg"}
+                            onClick={() => setScreenshotPreviewImage(image.image)}
+                          />
+                        </div>
+                        <div className={"absolute bottom-0 w-full bg-transparent"}></div>
+                      </>
+                    ))
+                    : <div className={"relative flex flex-col justify-center items-center w-full leading-normal bg-lighter gradient:to_bottom-whitesmoke-lightgray color-lightgray font-64 font-bold text-center lg:items-start lg:h-[480px] lg:px-[400px] dark:gradient:to_bottom-111314-222425|color-darkgray dark:rounded-none"}>{props.name}</div>
+                }
+              </div>
+            </div>
+          </section>
+        </section>
+      }
+      <section className={"w-full mx-auto lg:flex lg:flex-row lg:justify-between lg:items-start lg:w-full lg:px-8 dark:bg-inherit bg-orange-30"}>
+        <section
+          className="app-banner-container relative top-[280px] w-full max-w-full overflow-y-auto m-auto bg-white backdrop-blur-md rounded-2xl z-1 shadow:0px--20px-80px-20px-FFFFFF88 lg:top-[40px] lg:neg:top-80 lg:w-[56%] lg:mx-8 lg:ml-aut lg:bg-initial dark:shadow:0px--20px-80px-20px-11131488 dark:bg-base-300 dark:backdrop-blur-0">
+          {/*<img src="" alt="" id="id-app-banner-image" className="app-banner-image"/>*/}
+          {/*<section className="app-primary-details">
+            <div id="id-app-name" className="app-name">{props.name}</div>
+            <div id="id-app-description" className="app-description">{props.description}</div>
+            <div id="id-app-category" className="app-category">
+              {props.category.split(',').map((each_app_category) => {
+                return (<span
+                  className="d-inline-block pad-x2 h-4 lh-4 mg-x1-smt radius-round bg-light font-normal font-10">{each_app_category}</span>)
+              })}
+            </div>
+          </section>*/}
+
+          <section className={"space-y-3 rounded-xl dark:bg-base-300"}>
+            {
+              size.windowWidth < deviceWidthEnum.laptop &&
+              <section className={"relative bg-gray-100 bg-lighter px-0 py-0 rounded-2xl lg:p-2 lg:rounded-2xl dark:bg-base-200 dark:lg:mb-2"}>
+                {
+                  /* For mobile, tablet and devices smaller than the laptop */
+                  size.windowWidth < deviceWidthEnum.laptop
+                    ? <div className="relative flex flex-row justify-start items-center pt-4 pb-0 px-2 font-bold text-4xl font-21 text-center rounded-xl bg-inherit z-2 dark:color-whitesmoke dark:every:bg-333334|color-whitesmoke">
+                      {
+                        props.logo
+                          ? <img src={props.logo} alt={`${props.name} logo`}
+                            className="block mx-4 my-4 w-16 h-16 bg-light rounded-full radius-circle object-cover object-center dark:bg-333334" />
+                          : <div
+                            className={"relative block mx-4 w-16 h-16 leading-[64px] square-8 lh-8 rounded-full radius-circle border-0 border-DDD border-solid bg-light text-center font-bold cursor-pointer hover:shadow:inset-0px-0px-16px-0px-DDD transition:box-shadow_200ms_ease dark:bg-333334"}>
+                            {props?.name?.split('')[0].toUpperCase().toString()}
+                          </div>
+                      }
+                      {props.name}
+                    </div>
+                    : null
+                }
+                {
+                  /* For laptop and larger devices */
+                  size.windowWidth >= deviceWidthEnum.laptop
+                    ? <div
+                      className="relative flex flex-row items-center pt-8 pb-0 px-6 font-bold text-8xl rounded-2xl bg-inherit every:d-block|mg-x2|mg-y2|w-108|h-108|lh-108|radius-circle|bg-light dark:color-whitesmoke dark:every:bg-333334|color-whitesmoke">
+                      {
+                        props.logo
+                          ? <img src={props.logo} alt={`${props.name} logo`}
+                            className="block w-24 h-24 rounded-full mx-4 my-4 object-cover object-center dark:bg-lighter" />
+                          :
+                          <div
+                            className={"relative border-0 border-DDD border-solid text-center font-bold cursor-pointer hover:shadow:inset-0px-0px-16px-0px-DDD transition:box-shadow_200ms_ease dark:hover:shadow:inset-0px-0px-8px-0px-222425"}>
+                            {props?.name?.split('')[0].toUpperCase().toString()}
+                          </div>
+                      }
+                      {props.name}
+                    </div>
+                    : null
+                }
+                <div className="px-7 pt-2 pb-4 bg-inherit rounded-b-lg lg:font-14 lg:leading-10 lg:px-6 lg:py-5 lg:bg-inherit dark:color-whitesmoke">
+                  {props.truncate_description ? truncateLetters(props.description, 0, 160) : props.description}
+                </div>
+
+                {
+                  size.windowWidth >= deviceWidthEnum.laptop &&
+                    props.owner.id === tokenData?.tokenData?.user_id
+                    ? <Link to={`/app/${props.name_id}/update`}
+                      className={"hidden btn btn-primary absolute top-10 right-8 h-5 lh-5 bg-green rounded-xl px-4 decoration-none color-white"}>
+                      Edit
+                      <span className={"fa fa-pen pl-2 color-white"}></span>
+                    </Link>
+                    : null
+                }
+
+                <div className="flex flex-row flex-nowrap px-6 py-4 bg-base-100 rounded-xl radius overflow-x-auto lg:px-4 lg:py-2 lg:bg-inherit dark:bg-inherit">
+                  {
+                    props.category && props.category.split(',').map((each_app_category, index) => {
+                      return (
+                        <span key={index}
+                          className="inline-block px-4 h-10 leading-10 mx-1 rounded-lg border:1px_solid_DDD bg-base-300 font-normal font-11 lg:h-12 lg:leading-[48px] lg:border-0 lg:text-md dark:bg-111314BB|color-whitesmoke|border:1px_solid_222425">
+                          {each_app_category}
+                        </span>
+                      )
+                    })
+                  }
+                </div>
+              </section>
+            }
+
+            {
+              size.windowWidth < deviceWidthEnum.laptop &&
+              <section className="app-download-details rounded-xl bg-base-100 pl-6 dark:bg-base-300 dark:p-0">
+                {/*<header className={"font-medium"}>{"Download links".toUpperCase()}</header>*/}
+                <section
+                  className={"flex flex-row justify-start gap-x-4 pt-5 pb-5 empty:pad-0 rounded-lg overflow-x-auto every:w-auto|h-64|radius|text-center|radius-inherit|decoration-none|bg-lighter|color-initial|mg-x1|pad-r4 hover:every:bg-E8E8E8|cursor-pointer dark:bg-inherit|pad-x2 dark:every:bg-333435|color-whitesmoke dark:hover:every:bg-333435"}>
+                  {
+                    props.playstore_link !== ""
+                      ? <ExternalLink
+                        url={props.playstore_link}
+                        // text={"Download from Play Store"}
+                        classes={"flex-shrink-0 gap-4 w-auto h-16 rounded-2xl text-center decoration-none bg-base-200 mx-1 px-5 pr-8 hover:bg-base-300 dark:hover:bg-base-100 transition-colors"}
+                      >
+                        <Avatar
+                          src={"/static/playstore.png"}
+                          alt={"playstore logo"}
+                          width={"0"}
+                          classes={"w-8 rounded-none"}>
+                        </Avatar>
+                        <div className="leading-tight text-left">
+                          <div className={"text-[15px]"}>Download from</div>
+                          <div className={"font-semibold"}>{props.playstore_link ? "Google play store" : "-"}</div>
+                        </div>
+                        {/* {
+                        size.windowWidth <= deviceWidthEnum.laptop
+                          ? <span className={""}>Download</span>
+                          : <span className={""}>Download from Play Store</span>
+                      } */}
+                      </ExternalLink>
+                      : null
+                  }
+                  {
+                    props.appstore_link !== ""
+                      ? <ExternalLink
+                        url={props.appstore_link}
+                        id={"id-app-download-links"}
+                        classes={"flex-shrink-0 gap-4 w-auto h-16 rounded-2xl text-center decoration-none bg-base-200 mx-1 px-5 pr-8 hover:bg-base-300 dark:hover:bg-base-100 transition-colors"}>
+                        {/*<span className="fa-brands fa-app-store-ios d-block font-30 pad-t4 pad-b2"></span>*/}
+                        <Avatar
+                          src="/static/appstore.png"
+                          alt={"appstore logo"}
+                          width={"0"}
+                          classes={"w-8 rounded-none"} />
+                        {/* {
+                        size.windowWidth <= deviceWidthEnum.laptop
+                          ? "Download"
+                          : "Download from AppStore"
+                      } */}
+                        <div className="leading-tight text-left">
+                          <div className={"text-[15px]"}>Download from</div>
+                          <div className={"font-semibold"}>{props.playstore_link ? "Apple AppStore" : "-"}</div>
+                        </div>
+                      </ExternalLink>
+                      : null
+                  }
+                  {
+                    props.external_link !== ""
+                      ? <ExternalLink
+                        url={props.external_link}
+                        id="id-app-download-links"
+                        classes={"flex-shrink-0 gap-4 w-auto h-16 rounded-2xl text-center decoration-none bg-base-200 mx-1 px-5 pr-8 hover:bg-base-300 dark:hover:bg-base-100 transition-colors"}>
+                        {/*<span className="fa fa-download d-block font-30 pad-t4 pad-b2"></span>*/}
+                        <Avatar
+                          src={"/static/download.png"}
+                          alt={"download logo"}
+                          width={"32"}
+                          classes={"w-8 rounded-none"} />
+                        {
+                          size.windowWidth <= deviceWidthEnum.laptop
+                            ? "External Download"
+                            : "External Download"
+                        }
+                      </ExternalLink>
+                      : null
+                  }
+                  {/* {
                   props.playstore_link !== ""
                     ? <a href={props.playstore_link}
                       target={"_blank"}
@@ -394,15 +680,16 @@ function AppDetailContent(props) {
                     </a>
                     : null
                 } */}
+                </section>
+                {
+                  props.external_link
+                    ? <div className={"px-4 pb-2 font-medium dark:color-whitesmoke"}>
+                      {"** This app has an external download link."}
+                    </div>
+                    : null
+                }
               </section>
-              {
-                props.external_link
-                  ? <div className={"px-4 pb-2 font-medium dark:color-whitesmoke"}>
-                    {"** This app has an external download link."}
-                  </div>
-                  : null
-              }
-            </section>
+            }
 
             <section className={"space-y-10 rounded-xl lg:bg-base-100 dark:bg-base-300"}>
               <section className={"space-y-8 p-8 bg-base-10 rounded-xl dark:bg-base-200"}>
@@ -414,21 +701,21 @@ function AppDetailContent(props) {
                   </div>
                   <div className={"space-y-2"}>
                     <div>Status:</div>
-                    <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-md font-medium bg-blue-100 text-blue-800 dark:bg-blue-800/30 dark:text-blue-500">
-                      <span class="w-1.5 h-1.5 inline-block rounded-full bg-blue-800 dark:bg-blue-500"></span>
+                    <span className="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-md font-medium bg-blue-100 text-blue-800 dark:bg-blue-800/30 dark:text-blue-500">
+                      <span className="w-1.5 h-1.5 inline-block rounded-full bg-blue-800 dark:bg-blue-500"></span>
                       Active Development
                     </span>
                   </div>
                   <div className={"space-y-2"}>
                     <div>Phase:</div>
-                    <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-md font-medium bg-red-100 text-red-800 dark:bg-red-800/30 dark:text-red-500">
-                      <span class="w-1.5 h-1.5 inline-block rounded-full bg-red-800 dark:bg-red-500"></span>
+                    <span className="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-md font-medium bg-red-100 text-red-800 dark:bg-red-800/30 dark:text-red-500">
+                      <span className="w-1.5 h-1.5 inline-block rounded-full bg-red-800 dark:bg-red-500"></span>
                       Beta
                     </span>
                   </div>
-                  <div class="space-y-2 first:mt-0">
+                  <div className="space-y-2 first:mt-0">
                     <div>Release date: </div>
-                    <kbd class="kbd kbd-lg">
+                    <kbd className="kbd kbd-lg">
                       Dec 31, 2023
                     </kbd>
                   </div>
@@ -546,9 +833,9 @@ function AppDetailContent(props) {
               <section className={"flex flex-row gap-5 px-4 py-5 every:d-block|decoration-none|pad-x2|pad-y3 overflow-x-auto"}>
                 {
                   userApps?.results?.length > 0
-                    ? userApps?.results.map((eachUserApps, index) => {
+                    ? userApps?.results.filter(t => t.id !== props.id).map((eachUserApps, index) => {
                       return (
-                        index < 6 ? <BasicGridAppBoxes key={eachUserApps.id} {...eachUserApps} /> : null
+                        index < 5 ? <BasicGridAppBoxes key={eachUserApps.id} {...eachUserApps} /> : null
                       )
                     })
                     : <div className={"mg-x-auto mg-y1 pad-2 font-14 text-center color-gray"}>No apps yet</div>

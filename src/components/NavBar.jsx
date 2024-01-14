@@ -4,9 +4,10 @@ import { deleteUserTokens, deviceWidthEnum } from "../helpers/utils";
 import { useDeviceSize } from "../hooks/useDeviceSize";
 import { Avatar } from "./Elements";
 
-const NavBar = ({ header, showAddAppButton = false, showSearch, showProfile, hideVerifiedButton, children }) => {
+const NavBar = ({ header, showAddAppButton = false, hideSearch = false, hideProfile = false, hideVerifiedButton, children }) => {
     // const isLoggedIn = false;
     const { me } = useRouteLoaderData("root");
+    console.log(me);
     const tokenData = useTokenData();
     const accessToken = window.localStorage.getItem('nine_login');
     const size = useDeviceSize();
@@ -30,7 +31,7 @@ const NavBar = ({ header, showAddAppButton = false, showSearch, showProfile, hid
                 {/*    <input type="text" placeholder="Search" className="input input-bordered w-24 md:w-auto" />*/}
                 {/*</div>*/}
                 {
-                    showSearch !== false
+                    !hideSearch
                     && <Link to={"/search"} className="btn btn-ghost btn-circle">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                     </Link>
@@ -46,19 +47,23 @@ const NavBar = ({ header, showAddAppButton = false, showSearch, showProfile, hid
                             }
                         </div>
                     </label> */}
-                    <label tabIndex={0} htmlFor="profile-dropdown">
-                        <Avatar
-                            src={tokenData.dp}
-                            alt={"Profile"}
-                            width={12}
-                            classes={"btn border-0 bg-neutral hover:bg-accent transition-colors"}
-                        >
-                            {
-                                tokenData?.isLoggedIn &&
-                                <div className={""}>MO</div>
-                            }
-                        </Avatar>
-                    </label>
+                    {
+                        !hideProfile &&
+                        <label tabIndex={0} htmlFor="profile-dropdown" className={"flex flex-row items-center"}>
+                            <Avatar
+                                src={tokenData.dp}
+                                alt={""}
+                                width={12}
+                                classes={"btn leading-[48px] border-0 bg-neutral hover:bg-accent transition-colors"}
+                            >
+                                {
+                                    tokenData?.isLoggedIn
+                                        ? <div className={""}>{me.data && me.data?.firstname.split("")[0].toUpperCase()}</div>
+                                        : <div className={""}></div>
+                                }
+                            </Avatar>
+                        </label>
+                    }
                     <ul id="profile-dropdown" tabIndex={0} className="mt-3 z-[1] p-2 menu menu-sm dropdown-content bg-white/85 backdrop-blur-md lg:backdrop-blur-xl dark:bg-base-200 rounded-box w-56">
                         {
                             tokenData?.isLoggedIn
@@ -90,12 +95,15 @@ const NavBar = ({ header, showAddAppButton = false, showSearch, showProfile, hid
                     </ul>
                 </div>
                 {
-                    showAddAppButton && (size.windowWidth >= deviceWidthEnum.laptop)
-                        ? <>
-                            <div className="divider divider-horizontal"></div>
-                            <Link to={"/new"} className="btn btn-primary">List your App</Link>
-                        </>
-                        : <Link to={"/new"} className="fixed right-8 top-initial bottom-8 z-100 h-8 line-height-8 radius2 cursor-pointer font-semibold shadow:0px-0px-16px-4px-73C088 decoration-none dark:shadow-unset btn btn-primary">List your Apps</Link>
+                    showAddAppButton
+                    && (
+                        size.windowWidth >= deviceWidthEnum.laptop
+                            ? <>
+                                <div className="divider divider-horizontal"></div>
+                                <Link to={"/new"} className="btn btn-primary">List your App</Link>
+                            </>
+                            : <Link to={"/new"} className="fixed right-8 top-initial bottom-8 z-100 h-8 line-height-8 radius2 cursor-pointer font-semibold shadow:0px-0px-16px-4px-73C088 decoration-none dark:shadow-unset btn btn-primary">List your Apps</Link>
+                    )
                 }
                 {children}
             </div>

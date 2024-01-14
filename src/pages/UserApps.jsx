@@ -36,8 +36,8 @@ const UserApps = () => {
             modes: 'cors',  // options: cors, no-cors, same-origin
             cache: 'default',   // options: default, no-store, reload, no-cache, force-cache, only-if-cached
         }
-        if (userApps?.data.next)
-            axios(userApps?.data.next, fetchConfig)
+        if (userApps?.data?.next)
+            axios(userApps?.data?.next, fetchConfig)
                 // .then((res) => res.json())
                 .then((res) => res.data)
                 .then((data) => {
@@ -81,7 +81,7 @@ const UserApps = () => {
     return (
         <section className={"h-dvh vh:h-100 overflow-y-auto"} ref={scrollContainerRef}>
             {/* <NavBar showProfile={false} /> */}
-            <PageHeaderLink headerTitle={id === me?.data?.id ? "Your Apps" : `${userApps?.data.results[0]?.owner?.firstname} Apps`} />
+            <PageHeaderLink headerTitle={id === me?.data?.id ? "Your Apps" : `${userApps?.data?.results[0]?.owner?.firstname} Apps`} />
             <section className={"w-full lg:w-[80%] pct:w-100 mx-auto lg:pct:w-80"}>
                 <header
                     className={"relative w-full text-xl pct:w-100 font-15 px-4 py-4 font-medium radius decoration-none color-initial lg:font-18|pad-y4 dark:color-darkgray"}>
@@ -90,8 +90,8 @@ const UserApps = () => {
                 <section
                     className={"flex flex-col flex-nowrap justify-start items-start w-full gap-6 lg:flex-row lg:flex-wrap pct:w-100 px-4 overflow-x-auto"}>
                     {
-                        userApps?.data.results?.length > 0
-                            ? userApps?.data.results.map((eachUserApps) => {
+                        userApps?.data?.results?.length > 0
+                            ? userApps?.data?.results.map((eachUserApps) => {
                                 return (
                                     <section key={eachUserApps?.id} className={"flex flex-col items-center w-full lg:w-[30%] pct:w-100 lg:pct:w-33"} ref={userAppsContainerRef}>
                                         {
