@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Button, NotifInfo, NotifSuccess, TemporaryNotif } from "./Elements";
 
 let installPrompt = null;
 
@@ -29,17 +30,31 @@ const InstallPWA = () => {
             const result = await installPrompt.prompt();
             console.log("Install prompt was:", result.outcome);
             if (result.outcome === "accepted") { closeInstallContainer(); };
+            // Show the notification that installation was successful.
+            <TemporaryNotif time={4000}>
+                <NotifSuccess title={"Installation Successful"}>
+                    Nine is installed on your device.
+                    You can proceed from there.
+                </NotifSuccess>
+            </TemporaryNotif>
         }
 
         return (
-            <button
+            // <button
+            //     type="button"
+            //     className={"outline-none border-0 h-6 lh-6 pad-x2 radius bg-green color-white"}
+            //     ref={installButton}
+            //     onClick={clickInstallButton}
+            // >
+            //     {text}
+            // </button>
+            <Button
                 type="button"
-                className={"outline-none border-0 h-6 lh-6 pad-x2 radius bg-green color-white"}
                 ref={installButton}
                 onClick={clickInstallButton}
             >
                 {text}
-            </button>
+            </Button>
         )
     }
 
@@ -92,11 +107,17 @@ const InstallPWA = () => {
         <>
             {
                 showInstallContainer
-                && <section id="id-install-nine" className={"sticky top-0 flex flex-row align-items-center pad-2 bg-light bg-mica shadow dark:bg-green-inverse"} ref={installContainer}>
-                    <button type={"button"} className={"fa fa-times font-14 border-0 bg-transparent square-4 lh-4 text-center relative align-self-start dark:color-whitesmoke"} onClick={closeInstallContainer}></button>
-                    <div className={"install-message pct:w-100 pad-x2 dark:color-whitesmoke"}>
+                && <section id="id-install-nine" className={"sticky top-[64px] z-10 flex flex-row items-center p-4 bg-gray-200 backdrop-blur-md shadow dark:bg-base-200 dark:lg:bg-base-200"} ref={installContainer}>
+                    {/* <button type={"button"} className={"fa fa-times font-14 border-0 bg-transparent square-4 leading-8 text-center relative self-start dark:color-whitesmoke"} onClick={closeInstallContainer}></button> */}
+                    <Button
+                        classes={"btn-ghost relative self-start bg-transparent leading-8 text-center"}
+                        onClick={closeInstallContainer}
+                    >
+                        <span className={"fa fa-times"}></span>
+                    </Button>
+                    <div className={"install-message w-full px-4 font-bold text-sm dark:color-whitesmoke"}>
                         Install Nine as an app.
-                        <div className={""}>
+                        <div className={"font-normal lg:text-lg"}>
                             Installation takes less than 10 seconds
                         </div>
                     </div>
