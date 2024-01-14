@@ -6,6 +6,7 @@ import { StyleProcessor } from '../helpers/StyleProcessor';
 import { useDeviceSize } from '../hooks/useDeviceSize';
 import { deviceWidthEnum } from '../helpers/utils';
 import { FormField, LabelField } from '../components/Forms';
+import SignupOnboard from '../components/SignupOnboard';
 
 const SignupForm = () => {
     const [signupData, setSignupData] = useState({});
@@ -431,26 +432,174 @@ const SignupForm = () => {
     )
 }
 
+export const FeatureContainer = ({ classes, children }) => {
+    return (
+        <section className={`flex flex-col justify-center ${classes}`}>
+            {children}
+        </section>
+    )
+}
+
+export const FeatureHeader = ({ text, highlight, classes, children }) => {
+    return (
+        <header
+            className={`text-5xl leading-loose py-4 ${classes}`}
+        >
+            {text} <div className={"font-black text-7xl"}>{highlight}</div>
+            {children}
+        </header>
+    )
+}
+
+export const FeatureBullet = ({ children }) => {
+    return (
+        <>
+            {
+                children
+                    ? <div className={"flex items-start gap-x-4 text-2xl leading-loose my-2 text-balance"}>
+                        <span class="mt-3.5 h-5 w-5 flex-shrink-0 flex justify-center items-center rounded-full bg-blue-50 text-blue-600 dark:bg-blue-800/30 dark:text-blue-500">
+                            <svg class="flex-shrink-0 h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                        </span>
+                        <span>{children}</span>
+                    </div>
+                    :
+                    <span class="mt-0.5 h-5 w-5 flex justify-center items-center rounded-full bg-blue-50 text-blue-600 dark:bg-blue-800/30 dark:text-blue-500">
+                        <svg class="flex-shrink-0 h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                    </span>
+            }
+        </>
+    )
+}
+
+export const FeatureContent = ({ classes, children }) => {
+    return (
+        <div className={`text-2xl leading-loose my-4 ${classes}`}>
+            {children}
+        </div>
+    )
+}
+
 
 const Signup = () => {
     const size = useDeviceSize();
 
     return (
-        <section className={"flex flex-row items-center h-dvh dark:bg-base-300"}>
-            <div className="bg-white dark:bg-base-300 relative flex flex-col gap-4 w-full h-full mx-auto py-8 md:justify-center md:items-center md:w-[560px] lg:w-[540px]">
-                {/*<Link to="/" className="fixed top-2 left-1 square-6 lh-6 lg:top-4|left-4|square-8|lh-8 color-initial text-center font-16 radius-circle z-10"><span className="fa fa-times"></span></Link>*/}
-                <div className={"self-start md:self-center lg:self-start mb-8 md:mb-10"}>
-                    <Link to={"/"} className="block text-left md:text-center lg:text-left text-xl md:text-2xl font-medium md:font-medium px-4">Nine</Link>
-                    <div className="relative text-3xl md:text-4xl font-black lh-normal pl-4 mg:p-0 decoration-none color-initial md:text-center lg:text-left">Create Account</div>
+        <section className={"relative flex flex-row items-center w-full h-dvh dark:bg-base-300 overflow-clip"}>
+            <div className="bg-white dark:bg-base-300 flex-shrink-0 relative flex flex-col gap-4 w-full h-full mx-auto py-8 md:justify-center md:items-center md:w-[560px] lg:w-[60%]">
+                <div className={""}>
+                    {/*<Link to="/" className="fixed top-2 left-1 square-6 lh-6 lg:top-4|left-4|square-8|lh-8 color-initial text-center font-16 radius-circle z-10"><span className="fa fa-times"></span></Link>*/}
+                    <div className={"self-start md:self-center lg:self-start mb-8 md:mb-10"}>
+                        <Link to={"/"} className="block text-left md:text-center lg:text-left text-xl md:text-2xl font-medium md:font-medium px-4">Nine</Link>
+                        <div className="relative text-3xl md:text-4xl font-black lh-normal pl-4 mg:p-0 decoration-none color-initial md:text-center lg:text-left">Create Account</div>
+                    </div>
+                    <SignupForm />
                 </div>
-                <SignupForm />
                 {/* <Footer miniDetails={true} /> */}
             </div>
             {
                 size.windowWidth >= deviceWidthEnum.laptop
-                && <div className={"hidden flex-1 lg:flex flex-col justify-center items-center h-full bg-base-200"}>
-                    Nine.
-                    Signup to your account
+                && <div className={"hidden relative flex-1 lg:flex flex-col justify-center items-center w-full h-full px-8 bg-base-100 dark:bg-base-200 overflow-clip"}>
+                    <div aria-hidden="true" className="flex absolute top-24 start-2/4 transform z-0">
+                        <div className="bg-gradient-to-r from-violet-300/50 to-purple-100 blur-3xl w-[25rem] h-[44rem] rotate-[-60deg] transform -translate-x-[10rem] dark:from-violet-900/50 dark:to-purple-900"></div>
+                        <div className="bg-gradient-to-tl from-blue-50 via-blue-100 to-blue-50 blur-3xl w-[90rem] h-[50rem] rounded-fulls origin-top-left -rotate-12 -translate-x-[15rem] dark:from-indigo-900/70 dark:via-indigo-900/70 dark:to-blue-900/70"></div>
+                    </div>
+                    {/* Nine.
+                    Signup to your account */}
+                    {/* <div className={"text-2xl leading-normal"}>
+                        The platform where you can showcase webapps, mobile apps, games that you are building or that you have built. Either as a company or as an individual.
+                        <br />No more hassle when companies or clients wants to know what you have built. They come to N48ine and they find your work.
+                    </div> */}
+                    {/* ADD WAKATIME INTEGRATION TO SHOW YOU CODING HOURS - Jan 8, 2024 */}
+                    <article className={"flex flex-col justify-center h-dvh w-full overflow-x-hidden z-10"}>
+                        <div className={"relative w-[800px] mx-auto mb-12 text-lg font-bold"}>
+                            The all-in-one platform to
+                            <span className={"absolute -top-1 left-0 w-4 h-1 bg-primary rounded-full"}></span>
+                        </div>
+                        <section className={"flex flex-row flex-nowrap w-[800px] mx-auto overflow-auto snap-x snap-mandatory *:snap-center"}>
+                            <FeatureContainer classes={"flex-shrink-0 flex flex-col items-end w-full mx-auto"}>
+                                <FeatureHeader text={"Showcase your App"} highlight={"Portfolio"} classes={"flex-grow-0"}>
+                                    <FeatureContent classes={""}>
+                                        <FeatureBullet>
+                                            Showcase those web apps, mobile apps and games that you have built or that you are building.
+                                        </FeatureBullet>
+                                    </FeatureContent>
+                                </FeatureHeader>
+                            </FeatureContainer>
+
+                            <FeatureContainer classes={"flex-shrink-0 flex flex-col items-start w-full mx-auto"}>
+                                <FeatureHeader text={"Gain"} highlight={"Recognition"} classes={"flex-grow-0"}>
+                                    through your apps
+                                    <FeatureContent classes={""}>
+                                        <FeatureBullet>We will create a space for each of your apps and uniquely identify them with you.</FeatureBullet>
+                                    </FeatureContent>
+                                </FeatureHeader>
+                            </FeatureContainer>
+
+                            <FeatureContainer classes={"flex-shrink-0 flex flex-col items-start w-full mx-auto"}>
+                                <FeatureHeader text={"Find"} highlight={"Inspiration"} classes={"flex-grow-0"}>
+                                    for your next great idea.
+                                    <FeatureContent classes={""}>
+                                        <FeatureBullet>Find inspiration through other people's work.</FeatureBullet>
+                                        <FeatureBullet>Get motivated by other people's work.</FeatureBullet>
+                                    </FeatureContent>
+                                </FeatureHeader>
+                            </FeatureContainer>
+                        </section>
+                    </article>
+                    <article className={"hidden"}>
+                        <div className={"text-2xl leading-normal py-12"}>The all-in-one platform to:</div>
+                        <section>
+                            <header
+                                className={"text-5xl leading-loose py-4"}
+                            >
+                                Showcase your <span className={"font-black text-5xl"}>Portfolio</span>
+                            </header>
+                            <div className={"text-2xl leading-loose my-2"}>
+                                You can showcase those web apps, mobile apps and games that you have built or that you are building.
+                            </div>
+                            <div className={"flex items-center gap-x-4 text-2xl leading-loose my-2"}>
+                                <span class="mt-0.5 h-5 w-5 flex justify-center items-center rounded-full bg-blue-50 text-blue-600 dark:bg-blue-800/30 dark:text-blue-500">
+                                    <svg class="flex-shrink-0 h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                                </span>
+                                <span>Gain recognition through your apps.</span>
+                            </div>
+                            <div className={"text-2xl leading-loose my-2"}>
+                                Get Inspired and Motivated by other people's work.
+                            </div>
+                            <div className={"text-2xl leading-loose my-2"}>
+                                Find ongoing apps that you can collaborate on.
+                            </div>
+                            <div className={"text-2xl leading-loose my-2"}>
+                                Connect and Showcase yourself.
+                            </div>
+                        </section>
+                        <section>
+                            <header
+                                className={"text-5xl leading-loose py-4"}>
+                                Gain <span className={"font-black text-5xl"}>Recognition</span> through your apps
+                            </header>
+                            <div className={"flex items-center gap-x-4 text-2xl leading-loose my-2"}>
+                                <span class="mt-0.5 h-5 w-5 flex justify-center items-center rounded-full bg-blue-50 text-blue-600 dark:bg-blue-800/30 dark:text-blue-500">
+                                    <svg class="flex-shrink-0 h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                                </span>
+                                <span>Gain recognition through those apps you have built or that app you just finished building.</span>
+                            </div>https://docs.google.com/document/d/1xgyLF0kARQ49GLNh7p7F3TxY8X5GkWReNXNyFTcZqj4/edit?usp=sharing
+                            <div className={"flex items-center gap-x-4 text-2xl leading-loose my-2"}>
+                                <span class="mt-0.5 h-5 w-5 flex justify-center items-center rounded-full bg-blue-50 text-blue-600 dark:bg-blue-800/30 dark:text-blue-500">
+                                    <svg class="flex-shrink-0 h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                                </span>
+                                <span>List your apps on Nine and let us handle the rest.</span>
+                                <span>You never know who might be exploring Nine. They can see your work here.</span>
+                            </div>
+                            <div className={"flex items-center gap-x-4 text-2xl leading-loose my-2"}>
+                                <span class="mt-0.5 h-5 w-5 flex justify-center items-center rounded-full bg-blue-50 text-blue-600 dark:bg-blue-800/30 dark:text-blue-500">
+                                    <svg class="flex-shrink-0 h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                                </span>
+                                <span>List your apps on Nine and let us handle the rest.</span>
+                            </div>
+                        </section>
+                    </article>
+                    {/* <SignupOnboard></SignupOnboard> */}
                 </div>
             }
         </section>
