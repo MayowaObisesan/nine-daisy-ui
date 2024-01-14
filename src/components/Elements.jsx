@@ -100,7 +100,7 @@ export const ButtonUpdateSubmit = (props) => {
     return <Button {...props} classes={"btn-wide block mx-auto"}></Button>
 }
 
-export const Button = (props) => {
+export const Button = forwardRef((props, ref) => {
     return (
         <button
             type={props.type || "button"}
@@ -111,13 +111,14 @@ export const Button = (props) => {
             onClick={props.onClick}
             className={`btn btn-primary transition:outline_80ms_ease|width_800ms_ease disabled:bg-accent disabled:text-primary disabled:opacity-50 disabled:cursor-not-allowed dark:disabled:bg-primary dark:disabled:text-primary-content dark:disabled:opacity-25 ${props.classes}`}
             tabIndex={props.tabIndex}
+            ref={ref}
             {...props}
         >
             {props.value}
             {props.children}
         </button>
     )
-}
+});
 
 export const TextInput = forwardRef((props, ref) => {
     return (
