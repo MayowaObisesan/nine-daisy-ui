@@ -78,8 +78,8 @@
   "lang": "en",
   "orientation": "natural",
   "display_override": [
-    "window-controls-overlay",
     "standalone",
+    "window-controls-overlay",
     "browser"
   ],
   "dir": "auto",
