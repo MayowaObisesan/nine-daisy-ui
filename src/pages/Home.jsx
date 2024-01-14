@@ -5,6 +5,7 @@ import NavBar from "../components/NavBar";
 import { ListApps } from "../pages/loaders/appLoaders";
 import HomeCarousel from "../components/HomeCarousel";
 import LatestApps from "../components/LatestApps";
+import InstallPWA from "../components/Install";
 
 export async function appLoader() {
     const apps = await ListApps();
@@ -99,8 +100,8 @@ function Home() {
                     </div>
                     : null
             }
+            <InstallPWA />
             <HomeCarousel />
-            {/*<InstallPWA />*/}
             {/*<HomeBanner />*/}
             {/* <div>If you have a platform where you can showcase your apps. Apps you are working on or apps that you have completed. Will you like to use it?
                 If yes, then visit Nine.
