@@ -1,7 +1,8 @@
 {
   "short_name": "Nine",
   "name": "Nine App",
-  "description": "Nine is a platform for developers to showcase their apps, products and software to others.",
+  "id": "/",
+  "description": "Nine is the all-in-one platform to showcase your apps, products and software that you are building or have built.",
   "icons": [
     {
       "src": "favicon.ico",
@@ -72,5 +73,24 @@
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#ffffff",
-  "background_color": "#ffffff"
+  "background_color": "#ffffff",
+  "scope": "https://nineapp.vercel.app",
+  "lang": "en",
+  "orientation": "natural",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "browser"
+  ],
+  "dir": "auto",
+  "categories": [
+    "productivity",
+    "social",
+    "networking"
+  ],
+  "features": [
+    "Showcase",
+    "Learn",
+    "Collaborate"
+  ]
 }
