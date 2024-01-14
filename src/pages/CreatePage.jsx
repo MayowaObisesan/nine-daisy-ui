@@ -82,7 +82,7 @@ const getCreateAppFormDraft = () => {
         currentDraft = localStorage.setItem(NINE_CREATE_APP_FORM_DRAFT_NAME, JSON.stringify(defaultAppFormDraft));
     }
 
-    return JSON.parse(currentDraft);
+    return currentDraft ? JSON.parse(currentDraft) : {};
 }
 
 const readCreateAppFormDraft = (key) => {
@@ -103,7 +103,6 @@ function CreateAppsForm() {
     const [appScreenshots, setAppScreenshots] = useState([]);
     const [appScreenshotsPreview, setAppScreenshotsPreview] = useState([]);
     const [defaultAppsCategory] = useFetch(`${process.env.REACT_APP_BASE_URL}/app/category_list/`);
-    const [selectedCategoryCount, setSelectedCategoryCount] = useState(0);
     const [selectedCategoryData, setSelectedCategoryData] = useState('');
     const [selectedCategoryList, setSelectedCategoryList] = useState([]);
     const categoryItemsContainer = useRef(null);
@@ -135,6 +134,8 @@ function CreateAppsForm() {
     const [descriptionCount, setDescriptionCount] = useState(0);
     const closeCreatePageModal = useRef(null);
     const [appFormDraft, setAppFormDraft] = useState(getCreateAppFormDraft() || {});
+    const [appFormCategoryDraft, setAppFormCategoryDraft] = useState(appFormDraft?.category || []);
+    const [selectedCategoryCount, setSelectedCategoryCount] = useState(appFormDraft?.category?.length || 0);
     const [draftExist, setDraftExist] = useState(false);
     const [draftPopulated, setDraftPopulated] = useState(false);
 
@@ -168,11 +169,16 @@ function CreateAppsForm() {
     }, [currentFormPage])
 
     useEffect(() => {
-        setSelectedCategoryCount(appCategoryData?.length);
-    }, [appCategoryData]);
+        setSelectedCategoryCount(appFormCategoryDraft?.length);
+
+        setAppFormDraft(values => (
+            { ...values, "category": appFormCategoryDraft || appFormDraft?.category }
+        ));
+    }, [appCategoryData, appFormCategoryDraft]);
 
     useEffect(() => {
-        if (appCreateData?.name && appCreateData?.description) {
+        // if (appCreateData?.name && appCreateData?.description) {
+        if (appFormDraft?.name && appFormDraft?.description) {
             setAppFormPageSuccessfulList({ ...appFormPageSuccessfulList, "basic": true })
             // setAppFormPageData(appFormPageData)
         } else {
@@ -207,16 +213,18 @@ function CreateAppsForm() {
         return () => {
             setAppFormPageSuccessfulList({ ...appFormPageSuccessfulList })
         }
-    }, [appCreateData])
+    }, [appCreateData, appFormDraft])
 
     useEffect(() => {
-        if (selectedCategoryCount > 0) {
-            setAppFormPageSuccessfulList({ ...appFormPageSuccessfulList, "category": true })
-        } else {
-            setAppFormPageSuccessfulList({ ...appFormPageSuccessfulList, "category": false })
-        }
+        setAppFormPageSuccessfulList({ ...appFormPageSuccessfulList, "category": selectedCategoryCount > 0 })
+        // console.log(selectedCategoryCount)
+        // if (selectedCategoryCount > 0) {
+        //     setAppFormPageSuccessfulList({ ...appFormPageSuccessfulList, "category": true })
+        // } else {
+        //     setAppFormPageSuccessfulList({ ...appFormPageSuccessfulList, "category": false })
+        // }
         return () => { }
-    }, [selectedCategoryCount])
+    }, [selectedCategoryCount, appFormDraft])
 
     useEffect(() => {
         if (appImage) {
@@ -404,7 +412,7 @@ function CreateAppsForm() {
                 return [...values, value]
             }
         });
-        setAppFormDraft(values => {
+        setAppFormCategoryDraft(values => {
             if (values.includes(value)) {
                 return values.filter((item) => item !== value);
             } else {
@@ -738,7 +746,7 @@ function CreateAppsForm() {
                                     className={"sticky top-0 block w-full bg-base-200/80 backdrop-blur px:top-80 d-block pct:w-100 bg-white bg-mica z-10 dark:bg-111314 dark:bg-base-200/80"}
                                     ref={selectedCategoryContainer}>
                                     {
-                                        appCategoryData?.map((eachCategory, index) => (
+                                        appFormCategoryDraft?.map((eachCategory, index) => (
                                             <span key={index} id={`id-category-${index}`}
                                                 className="inline-block h-10 leading-10 px-4 mx-2 my-2 rounded-full bg-base-100 text-base-content radius-round bg-lighter border:1px_solid_BBB font-bold dark:bg-222425|color-whitesmoke|border:1px_solid_darkgray">
                                                 {eachCategory}
@@ -774,6 +782,7 @@ function CreateAppsForm() {
                                                                 id={`id-category-${eachAppsCategory}`}
                                                                 className="appearance-none checked:checkbox checked:checkbox-sm checked:bg-success"
                                                                 // defaultChecked={appData?.category.split(",").includes(eachAppsCategory)}
+                                                                defaultChecked={appFormCategoryDraft.includes(eachAppsCategory)}
                                                                 defaultValue={eachAppsCategory}
                                                                 onChange={handleCategoryChange}
                                                                 disabled={!appCategoryData?.includes(eachAppsCategory) && appCategoryData?.length === maxCategoryCount}
@@ -824,6 +833,13 @@ function CreateAppsForm() {
                         <PageSwitchContentContainer>
                             <PageSwitchHeader>Add Links to download your app</PageSwitchHeader>
                             <div className={"p-4 space-y-8"}>
+                                {
+                                    !tokenData?.is_verified
+                                    && <NotifWarning title={"You are not logged in."}>
+                                        <div>You need to login to list your app</div>
+                                        Go back and login. Your draft will be saved for you.
+                                    </NotifWarning>
+                                }
                                 <FormField>
                                     <LabelField>
                                         Play Store
@@ -860,7 +876,7 @@ function CreateAppsForm() {
                                 </FormField>
                                 <FormField>
                                     <LabelField>
-                                        Other Store
+                                        Website
                                         <TextInput
                                             type={"url"}
                                             id={"id-new-app-website"}

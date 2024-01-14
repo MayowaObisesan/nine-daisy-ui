@@ -88,8 +88,8 @@ export const Avatar = ({ type, badge, width, src, alt, classes = "", children })
                     ? <div className={`bg-neutral hover:bg-accent text-accent-content rounded-full ${defaultClasses}`}>
                         {children}
                     </div>
-                    : <div className={defaultClasses}>
-                        <img src={src} alt={alt || ""} />
+                    : <div className={`${defaultClasses} w-full`}>
+                        <img src={src} alt={alt || ""} className="" />
                     </div>
             }
         </div>

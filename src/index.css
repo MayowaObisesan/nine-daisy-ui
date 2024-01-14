@@ -256,3 +256,22 @@ a:focus {
     /* filter: hue-rotate(60deg); */
   }
 }
+
+/* APP BANNER SCREENSHOT PREVIEW */
+.app-banner-screenshot-preview {
+  /* transform: rotate3d(15, 30, 0, 60deg); */
+  /* transform: rotateY(45deg); */
+  /* transform-origin: 30% 0%; */
+  /* transform-style: preserve-3d; */
+  perspective: 600px;
+  /* perspective-origin: left bottom; */
+}
+
+.app-banner-screenshot-preview img {
+  /* transform: rotate3d(15, 30, 0, 60deg); */
+  transform: rotateY(-25deg);
+  transform-origin: 90% 0%;
+  transform-style: preserve-3d;
+  /* perspective: 600px; */
+  /* perspective-origin: left bottom; */
+}

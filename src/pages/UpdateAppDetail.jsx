@@ -5,6 +5,7 @@ import { deviceWidthEnum, truncateLetters } from "../helpers/utils";
 import { getApp } from "./loaders/appLoaders";
 import { useDeviceSize } from "../hooks/useDeviceSize";
 import NavBar from "../components/NavBar";
+import useTokenData from "../hooks/useTokenData";
 
 export async function loader({ params }) {
   const app = await getApp(params.appNameId);
@@ -19,6 +20,7 @@ export function UpdateAppsGroups() {
   // const [appData] = useFetch(`${process.env.REACT_APP_BASE_URL}/app/${id}/`);
   // const { windowWidth, screenWidth, deviceWidthEnum } = useDeviceWidth();
   const size = useDeviceSize();
+  const tokenData = useTokenData();
 
   return (
     <section
@@ -29,8 +31,31 @@ export function UpdateAppsGroups() {
       </section>*/}
       {
         size.windowWidth < deviceWidthEnum.laptop
-          ? <PageHeaderLink headerTitle={"Update your app"} fixTop={true} />
-          : <NavBar />
+          ? <PageHeaderLink headerTitle={"Update your app"} fixTop={true}>
+            {
+              appData.owner.id === tokenData?.tokenData?.user_id
+                ? <Link to={`/app/${appData.name_id}/update/new`}
+                  className={"btn btn-primary absolute right-4 h-10 leading-10 rounded-xl px-4 decoration-none"}>
+                  List New Version
+                  <span className={"fa fa-upload pl-1"}></span>
+                </Link>
+                : null
+            }
+          </PageHeaderLink>
+          : <NavBar>
+            {
+              appData?.owner.id === tokenData?.tokenData?.user_id
+                ? <>
+                  <div className="divider divider-horizontal"></div>
+                  <Link to={`/app/${appData?.name_id}/update`}
+                    className={"btn btn-primary h-6 leading-6 bg-green rounded-xl text-base px-4 decoration-none"}>
+                    List new version
+                    <span className={"fa fa-upload pl-1 text-sm color-white"}></span>
+                  </Link>
+                </>
+                : null
+            }
+          </NavBar>
       }
 
       <section className={"fixed top-[80px] px:top-80 flex flex-col justify-center items-center w-full h-[200px] pct:w-100 h-200 mx-auto bg-base-200 bg-light text-center lg:relative lg:top-0 lg:min-h-[480px] lg:py-8 lg:relative|px:top-0|min-h-480|pad-y8 dark:bg-000304"}>

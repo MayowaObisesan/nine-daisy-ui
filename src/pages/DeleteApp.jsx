@@ -174,7 +174,7 @@ function DeleteApp() {
                 </button> */}
                             <Button
                                 type={"submit"}
-                                classes={"btn-wide block mx-auto btn-error disabled:bg-error disabled:text-error-content dark:disabled:bg-error"}
+                                classes={"btn-wide block mx-auto btn-error disabled:bg-error disabled:text-white dark:disabled:bg-red-800"}
                                 disabled={appName !== appData?.name}
                                 onClick={showLoadingState}
                             >
