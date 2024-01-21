@@ -209,7 +209,7 @@ function AppDetailContent(props) {
             props?.screenshot.length > 0
               ? props?.screenshot.map((image, index) => (
                 <>
-                  <div key={index} className={"w-full h-[240px] mx-auto px-4 rounded-lg lg:h-[480px] lg:px-2"}>
+                  <div key={index} className={"w-full h-[240px] mx-auto px-1 rounded-lg lg:h-[480px] lg:px-2"}>
                     <img src={image.image}
                       alt={`screenshot preview ${index}`} height={""}
                       className={"max-w-full w-full h-full object-cover object-center rounded-lg"} />
@@ -306,7 +306,7 @@ function AppDetailContent(props) {
                         src={"/static/playstore.png"}
                         alt={"playstore logo"}
                         width={"0"}
-                        classes={"w-8 rounded-none"}>
+                        classes={"size-8 rounded-none"}>
                       </Avatar>
                       <div className="leading-tight text-left">
                         <div className={"text-[15px]"}>Download from</div>
@@ -331,7 +331,7 @@ function AppDetailContent(props) {
                         src="/static/appstore.png"
                         alt={"appstore logo"}
                         width={"0"}
-                        classes={"w-8 rounded-none"} />
+                        classes={"size-8 rounded-none"} />
                       {/* {
                           size.windowWidth <= deviceWidthEnum.laptop
                             ? "Download"
@@ -355,7 +355,7 @@ function AppDetailContent(props) {
                         src={"/static/download.png"}
                         alt={"download logo"}
                         width={"32"}
-                        classes={"w-8 rounded-none"} />
+                        classes={"size-8 rounded-none"} />
                       {
                         size.windowWidth <= deviceWidthEnum.laptop
                           ? "External Download"
@@ -568,7 +568,7 @@ function AppDetailContent(props) {
                           src={"/static/playstore.png"}
                           alt={"playstore logo"}
                           width={"0"}
-                          classes={"w-8 rounded-none"}>
+                          classes={"size-8 rounded-none"}>
                         </Avatar>
                         <div className="leading-tight text-left">
                           <div className={"text-[15px]"}>Download from</div>
@@ -593,7 +593,7 @@ function AppDetailContent(props) {
                           src="/static/appstore.png"
                           alt={"appstore logo"}
                           width={"0"}
-                          classes={"w-8 rounded-none"} />
+                          classes={"size-8 rounded-none"} />
                         {/* {
                         size.windowWidth <= deviceWidthEnum.laptop
                           ? "Download"
@@ -617,7 +617,7 @@ function AppDetailContent(props) {
                           src={"/static/download.png"}
                           alt={"download logo"}
                           width={"32"}
-                          classes={"w-8 rounded-none"} />
+                          classes={"size-8 rounded-none"} />
                         {
                           size.windowWidth <= deviceWidthEnum.laptop
                             ? "External Download"
@@ -761,7 +761,7 @@ function AppDetailContent(props) {
                       src={"/static/playstore.png"}
                       alt={"playstore"}
                       width={"0"}
-                      classes={"w-6 rounded-none"}>
+                      classes={"w-6 h-6 rounded-none"}>
                     </Avatar>
                     <span className={"pad-x1 lg:font-13 dark:color-whitesmoke"}>{props.playstore_link ? "Download from Google play store" : "-"}</span>
                   </ExternalLink>
@@ -774,7 +774,7 @@ function AppDetailContent(props) {
                       src={"/static/appstore.png"}
                       alt={"appstore"}
                       width={"0"}
-                      classes={"w-6 rounded-none"}>
+                      classes={"w-6 h-6 rounded-none"}>
                     </Avatar>
                     <span className={"pad-x1 lg:font-13 dark:color-whitesmoke"}>{props.appstore_link ? "Download from Apple AppStore" : "-"}</span>
                   </ExternalLink>
@@ -787,7 +787,7 @@ function AppDetailContent(props) {
                       src={"/static/download.png"}
                       alt={"external"}
                       width={"0"}
-                      classes={"w-6 rounded-none"}>
+                      classes={"w-6 h-6 rounded-none"}>
                     </Avatar>
                     <span className={"pad-x1 lg:font-13 dark:color-whitesmoke"}>{props.external_link ? "External Download" : "-"}</span>
                   </ExternalLink>

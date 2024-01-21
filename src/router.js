@@ -58,7 +58,7 @@ const router = createBrowserRouter(
                     <Route id={"updateAppScreenshotReplace"} path={":screenshotId/replace"} element={<UpdateAppScreenshotReplace />} render={props => <UpdateAppScreenshotReplace {...props.match.params} />} loader={appDetailLoader} errorElement={<ErrorPage />}></Route>
                     <Route id={"updateAppScreenshotDelete"} path={":screenshotId/delete"} element={<UpdateAppScreenshotDelete />} render={props => <UpdateAppScreenshotDelete {...props.match.params} />} loader={appDetailLoader}></Route>
                 </Route>
-                <Route id={"updateAppCategory"} path={"category"} element={<UpdateAppCategory />} render={props => <UpdateAppCategory {...props.match.params} />} loader={appDetailLoader}></Route>
+                <Route id={"updateAppCategory"} path={"category"} element={<UpdateAppCategory />} render={<UpdateAppCategory />} loader={appDetailLoader}></Route>
                 <Route id={"updateAppDownloadLinks"} path={"download-links"} element={<UpdateAppDownloadLinks />} render={props => <UpdateAppDownloadLinks {...props.match.params} />} loader={appDetailLoader}></Route>
             </Route>
             <Route id={"signup"} path="signup" element={<Signup />} />

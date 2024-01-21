@@ -51,22 +51,24 @@ const NavBar = ({ header, showAddAppButton = false, hideSearch = false, hideProf
                         !hideProfile &&
                         <label tabIndex={0} htmlFor="profile-dropdown" className={"flex flex-row items-center"}>
                             <Avatar
-                                src={tokenData.dp}
+                                src={tokenData.tokenData?.dp}
                                 alt={""}
-                                width={12}
-                                classes={"btn leading-[48px] border-0 bg-neutral hover:bg-accent transition-colors"}
+                                width={"12"}
+                                classes={"btn p-1 w-full *:rounded-full leading-[48px] border-0 bg-neutral hover:bg-accent transition-colors"}
                             >
                                 {
-                                    tokenData?.isLoggedIn
-                                        ? <div className={""}>{me.data && me.data?.firstname.split("")[0].toUpperCase()}</div>
-                                        : <div className={""}></div>
+                                    !tokenData.tokenData?.dp && (
+                                        me.data?.firstname
+                                            ? <div className={""}>{me.data && me.data?.firstname.split("")[0].toUpperCase()}</div>
+                                            : <div className={""}></div>
+                                    )
                                 }
                             </Avatar>
                         </label>
                     }
                     <ul id="profile-dropdown" tabIndex={0} className="mt-3 z-[1] p-2 menu menu-sm dropdown-content bg-white/85 backdrop-blur-md lg:backdrop-blur-xl dark:bg-base-200 rounded-box w-56">
                         {
-                            tokenData?.isLoggedIn
+                            tokenData?.tokenData?.isLoggedIn
                                 ? <>
                                     <li>
                                         <Link to={"/profile"} className="justify-between p-4">
@@ -84,11 +86,11 @@ const NavBar = ({ header, showAddAppButton = false, hideSearch = false, hideProf
                                     </li>
                                 </>
                         }
-                        <div className={"divider my-1"}></div>
+                        <div className={"divider my-1 after:h-px before:h-px"}></div>
                         <li><Link to={"/about"} className={"p-4"}>About</Link></li>
                         <li><Link to={"/terms"} className={"p-4"}>Terms of Service</Link></li>
                         <li><Link to={"/privacy"} className={"p-4"}>Privacy</Link></li>
-                        <div className={"divider my-1"}></div>
+                        <div className={"divider my-1 after:h-px before:h-px"}></div>
                         <li className={"font-bold text-error hover:bg-error/30 rounded-xl transition-colors"}>
                             <Link to={"/"} className="justify-start p-4" onClick={logout}>Logout</Link>
                         </li>
