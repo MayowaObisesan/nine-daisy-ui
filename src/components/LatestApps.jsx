@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { AppBoxes } from "./AppBoxes";
+import { AppBoxes, HorizAppBoxes } from "./AppBoxes";
 import axios from 'axios';
 // import { ListApps } from './loaders/appLoaders';
 import { useLoaderData, useNavigation } from 'react-router-dom';
+import { useDeviceSize } from '../hooks/useDeviceSize';
+import { deviceWidthEnum } from '../helpers/utils';
 
 // export async function loader() {
 //   const apps = await ListApps();
@@ -24,6 +26,7 @@ const AppList = props => {
   const appsList = props.appsList
   const isAppsListEmpty = props.isAppsListEmpty
   const isNetworkError = props.isNetworkError
+  const size = useDeviceSize();
 
   if (appsList?.length < 1) {
     return (
@@ -41,10 +44,17 @@ const AppList = props => {
             ? appsList.map((each_apps_obj, index) => {
               return (
                 <section key={index} className={"flex flex-col items-center w-full md:w-[340px] lg:w-[364px] lg:min-w-80 lg:max-w-[26rem] lg:flex-1 pct:w-100 lg:pct:w-33"}>
-                  <AppBoxes key={each_apps_obj.id} id={each_apps_obj.id} name={each_apps_obj.name}
-                    description={each_apps_obj.description} category={each_apps_obj.category}
-                    truncate_description={true} {...each_apps_obj}
-                  />
+                  {
+                    size.windowWidth >= deviceWidthEnum.tablet
+                      ? <AppBoxes key={each_apps_obj.id} id={each_apps_obj.id} name={each_apps_obj.name}
+                        description={each_apps_obj.description} category={each_apps_obj.category}
+                        truncate_description={true} {...each_apps_obj}
+                      />
+                      : <HorizAppBoxes key={each_apps_obj.id} id={each_apps_obj.id} name={each_apps_obj.name}
+                        description={each_apps_obj.description} category={each_apps_obj.category}
+                        truncate_description={true} {...each_apps_obj}
+                      />
+                  }
                 </section>
                 // <div key={each_apps_obj.app_name}>
                 //     {each_apps_obj.app_name}

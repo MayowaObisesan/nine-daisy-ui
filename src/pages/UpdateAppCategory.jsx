@@ -15,12 +15,12 @@ import useTokenData from "../hooks/useTokenData";
 import { maxCategoryCount } from "../helpers/constants";
 
 const UpdateAppCategory = () => {
-    const { appId } = useParams();
+    const { appNameId } = useParams();
     const { app } = useLoaderData();
     const appData = app?.data;
     // const { windowWidth, screenWidth, deviceWidthEnum } = useDeviceWidth();
     const size = useDeviceSize();
-    // const [appData] = useFetch(`${process.env.REACT_APP_BASE_URL}/app/${appId}/`);
+    // const [appData] = useFetch(`${process.env.REACT_APP_BASE_URL}/app/${appNameId}/`);
     const [defaultAppsCategory] = useFetch(`${process.env.REACT_APP_BASE_URL}/app/category_list/`);
     // const { rawToken, isLoggedIn, tokenData } = useAtomValue(tokenState);
     const { rawToken, isLoggedIn, tokenData } = useTokenData();
@@ -126,7 +126,7 @@ const UpdateAppCategory = () => {
         const formData = new FormData();
         formData.append("category", updateAppCategoryData);
 
-        const updateAppURL = `${process.env.REACT_APP_BASE_URL}/app/${appId}/`;
+        const updateAppURL = `${process.env.REACT_APP_BASE_URL}/app/${appNameId}/`;
         const headers = {
             'Accept': '*/*',
             // 'Origin': '*',

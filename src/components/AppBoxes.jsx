@@ -167,7 +167,7 @@ export function AppBoxes(props) {
                 {/*<div className="square-12 radius-circle bg-light mg-t3"></div>*/}
                 <div className={"relative w-full h-[200px] bg-light gradient:to_top_right-lightgray-whitesmoke radius dark:gradient:to_top_right-111314-222425"}>
                     <img src={props.logo} alt={`${props.name} logo`}
-                        className="w-full h-[200px] outline:0px_solid_lightgray outline-offset-2 bg-light gradient:to_top_right-lightgray-whitesmoke rounded-[0.65rem] object-cover lg:object-[unset] object-center shadow:0px--2px-8px-2px-FFFFFF88 dark:gradient:to_top_right-111314-222425|shadow-unset" />
+                        className="w-full h-[200px] outline:0px_solid_lightgray outline-offset-2 bg-light gradient:to_top_right-lightgray-whitesmoke rounded-[0.65rem] object-contain lg:object-[unset] object-center shadow:0px--2px-8px-2px-FFFFFF88 dark:gradient:to_top_right-111314-222425|shadow-unset" />
                     {
                         props.screenshot?.length > 0
                             ? <span
@@ -205,14 +205,83 @@ export function AppBoxes(props) {
                         <Avatar
                             src={props.owner?.dp}
                             width={"8"}
+                            classes={"h-8 object-contain"}
                         >
-                            <span></span>
+                            {!props.owner?.dp && <span></span>}
                         </Avatar>
-                        <img src={props.owner?.dp} alt="" className="square-3 lh-3 radius-circle bg-lighter dark:bg-222324" />
+                        {/* <img src={props.owner?.dp} alt="" className="square-3 lh-3 radius-circle bg-lighter dark:bg-222324" /> */}
                         <div className="pad-x1 font-12 font-normal">{props.owner?.firstname} {props.owner?.lastname}</div>
                     </Link>
                     : null
             }
+            {props.children}
+        </section>
+    )
+}
+
+export function HorizAppBoxes(props) {
+    const tokenData = useTokenData();
+    return (
+        <section key={props.name}
+            className={"relative space-y-4 w-full m:w-[82%] p-2 rounded-xl hover:cursor-pointer lg:border-0 border:0px_solid_BBB bg-base-100 lg:hover:bg-base-200 dark:bg-base-200 dark:lg:hover:bg-base-100 transition-colors"}
+        >
+            <Link to={`/app/${props.name_id}`} state={{ appName: props.name, appNameId: props.name_id }}
+                className="relative flex flex-row justify-center items-start gap-y-4 w-[full] h-full decoration-none color-initial text-base font-14 dark:color-whitesmoke">
+                {/*<div className="square-12 radius-circle bg-light mg-t3"></div>*/}
+                <div className={"relative flex flex-col justify-center w-[280px] px-2 h-full bg-base-100/50 rounded-lg gradient:to_top_right-lightgray-whitesmoke radius dark:gradient:to_top_right-111314-222425"}>
+                    <img
+                        src={props.logo}
+                        alt={`${props.name} logo`}
+                        className="w-full h-[144px] outline:0px_solid_lightgray outline-offset-2 gradient:to_top_right-lightgray-whitesmoke rounded-[0.65rem] object-contain lg:object-[unset] object-center shadow:0px--2px-8px-2px-FFFFFF88 dark:gradient:to_top_right-111314-222425|shadow-unset"
+                    />
+                    {
+                        props.screenshot?.length > 0
+                            ? <span
+                                className={"absolute left-2 bottom-2 text-sm font-10 h-6 leading-6 px-2 bg-base-100/40 dark:bg-base-300/60 text color-whitesmoke text-center rounded-badge"}>
+                                {props.screenshot?.length}
+                                {
+                                    props.screenshot?.length > 1
+                                        ? <span className={"fa fa-images text-sm font-10 pl-2"}></span>
+                                        : <span className={"fa fa-image text-sm font-10 pl-2"}></span>
+                                }
+                            </span>
+                            : null
+                    }
+                </div>
+                <section className="space-y-3 pl-2 py-2">
+                    <div className={"px-2"}>
+                        <span className="font-semibold text-lg font-16">{props.name}</span>
+                    </div>
+                    <div className="px-2 text-[15px]">{props.truncate_description ? truncateLetters(props.description, 0, 80) : props.description}</div>
+                    {
+                        props.hideUser !== true
+                            ? <Link to={props.owner?.id === tokenData?.tokenData?.user_id ? "/profile" : `/user/${props.owner?.id}/`}
+                                className={"flex flex-row justify-start items-center gap-1 px-4 py-1 decoration-none color-initial dark:color-whitesmoke"}>
+                                <Avatar
+                                    src={props.owner?.dp}
+                                    width={"6"}
+                                    classes={"h-6 object-contain"}
+                                >
+                                    {!props.owner?.dp && <span></span>}
+                                </Avatar>
+                                {/* <img src={props.owner?.dp} alt="" className="square-3 lh-3 radius-circle bg-lighter dark:bg-222324" /> */}
+                                <div className="pad-x1 text-sm font-12 font-normal">{props.owner?.firstname} {props.owner?.lastname}</div>
+                            </Link>
+                            : null
+                    }
+                </section>
+                {/*<div className="pad-t2 text-center font-semibold">{props.playstore_link}</div>*/}
+                {/* <div className="w-[96%] mx-auto rounded space-x-1">
+                    {props.category && props.category.split(',').map((each_app_category, index) => {
+                        return (
+                            each_app_category !== "" && <span key={index}
+                                className="inline-block px-2 h-8 leading-8 rounded-md bg-base-300 font-normal text-sm">
+                                {each_app_category}
+                            </span>
+                        )
+                    })}
+                </div> */}
+            </Link>
             {props.children}
         </section>
     )
