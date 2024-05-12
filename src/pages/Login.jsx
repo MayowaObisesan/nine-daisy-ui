@@ -119,8 +119,7 @@ const LoginForm = () => {
                 }
                 <div className={"flex flex-col"}>
                     <FormField classes={"font-semibold"}>
-                        <LabelField classes={"flex flex-col items-start"}>
-                            Email
+                        <LabelField text={<span className={"font-semibold"}>Email</span>} classes={"font-bold"}>
                             <TextInput
                                 type="email"
                                 name="email"
@@ -134,7 +133,7 @@ const LoginForm = () => {
                         </LabelField>
                     </FormField>
                     <FormField classes={"font-semibold"}>
-                        <LabelField classes={"flex flex-col items-start"}>
+                        <LabelField classes={"font-bold"}>
                             Password
                             <TextInput
                                 type="password"

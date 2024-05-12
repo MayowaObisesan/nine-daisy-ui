@@ -95,7 +95,7 @@ const UpdateProfileSocialInfo = () => {
                     throw response;
                 }
                 // return response.json();
-                return response.json()
+                return response.data;
             })
             .then((data) => {
                 console.log(data);
@@ -127,6 +127,7 @@ const UpdateProfileSocialInfo = () => {
                 //     // There is no network connection or the Server is not up.
                 //     error_message = "Oops. Network Error"
                 // }
+                console.log(error);
                 const errorMessage = error.response?.data.error || "Unable to process request";
                 setUpdateProfileSocialInfoResponseData({
                     message: errorMessage,

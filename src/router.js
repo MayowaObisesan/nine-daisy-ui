@@ -39,6 +39,7 @@ import Profile, { loader as profileLoader } from "./pages/Profile";
 import About from "./pages/About";
 import NoPage from "./pages/NoPage";
 import { ErrorBoundary, ErrorFallback } from "./helpers/utils";
+import CreateNewVersion from "./pages/CreateNewVersion";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -47,6 +48,7 @@ const router = createBrowserRouter(
             <Route id={"createApp"} path="new" element={<CreatePage />} />
             <Route id={"appDetail"} path="app/:appNameId" element={<AppDetail />} render={props => <AppDetail {...props.match.params} />} loader={appDetailLoader} errorElement={<ErrorPage />} />
             <Route id={"deleteApp"} path="app/:appNameId/delete" element={<DeleteApp />} render={props => <DeleteApp {...props.match.params} />} loader={appDetailLoader} errorElement={<ErrorPage />} />
+            <Route id={"newVersionApp"} path="app/:appNameId/new" element={<CreateNewVersion />} render={props => <CreateNewVersion {...props.match.params} />} loader={appDetailLoader} errorElement={<ErrorPage />}></Route>
             <Route id={"updateApp"} path="app/:appNameId/update" element={<UpdateAppDetail />} render={props => <UpdateAppDetail {...props.match.params} />} loader={appDetailLoader} errorElement={<ErrorPage />}>
                 <Route index id={"updateAppDetail"} element={<UpdateAppsGroups />} render={props => <UpdateAppDetail {...props.match.params} />} loader={appDetailLoader} errorElement={<ErrorPage />} />
                 <Route id={"updateAppLogo"} path={"logo"} element={<UpdateAppLogo />} render={props => <UpdateAppLogo {...props.match.params} />} loader={appDetailLoader} errorElement={<ErrorPage />}></Route>

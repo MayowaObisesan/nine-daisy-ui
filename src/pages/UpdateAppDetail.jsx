@@ -47,7 +47,7 @@ export function UpdateAppsGroups() {
               appData?.owner.id === tokenData?.tokenData?.user_id
                 ? <>
                   <div className="divider divider-horizontal"></div>
-                  <Link to={`/app/${appData?.name_id}/update`}
+                  <Link to={`/app/${appData?.name_id}/new`}
                     className={"btn btn-primary h-6 leading-6 bg-green rounded-xl text-base px-4 decoration-none"}>
                     List new version
                     <span className={"fa fa-upload pl-1 text-sm color-white"}></span>

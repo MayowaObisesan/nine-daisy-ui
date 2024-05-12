@@ -703,7 +703,8 @@ function AppDetailContent(props) {
                     <div>Status:</div>
                     <span className="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-md font-medium bg-blue-100 text-blue-800 dark:bg-blue-800/30 dark:text-blue-500">
                       <span className="w-1.5 h-1.5 inline-block rounded-full bg-blue-800 dark:bg-blue-500"></span>
-                      Active Development
+                      {/* Active Development */}
+                      {props.current_version.release_type}
                     </span>
                   </div>
                   <div className={"space-y-2"}>
@@ -716,7 +717,8 @@ function AppDetailContent(props) {
                   <div className="space-y-2 first:mt-0">
                     <div>Release date: </div>
                     <kbd className="kbd kbd-lg">
-                      Dec 31, 2023
+                      {new Date(props.created_at).toDateString()}
+                      {/* {new Date(props.current_version.release_date).toDateString()} */}
                     </kbd>
                   </div>
                   <div className={"space-y-2"}>
