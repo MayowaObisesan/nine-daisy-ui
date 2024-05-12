@@ -424,7 +424,7 @@ const SignupForm = () => {
             </form>
             <div className={"d-block pct:w-72 mg-x-auto mg-y4 border:0px_solid_BBB em:border-t-0.05 lg:w-320|mg-y8|border-DDD dark:border:0px_solid_444445 dark:em:border-t-0.05"}></div>
             <div
-                className={"pct:w-96 mg-x-auto text-center lg:w-400"}>
+                className={"pct:w-96 mg-x-auto py-8 text-center lg:w-400"}>
                 Already have an account?
                 <Link to={"/login"} className={"font-bold pad-y2 pad-x1 color-initial dark:color-whitesmoke"}>Login</Link>
             </div>

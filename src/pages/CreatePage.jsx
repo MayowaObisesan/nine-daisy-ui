@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { StyleProcessor } from "../helpers/StyleProcessor";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useRouteLoaderData } from "react-router-dom";
 import { Button, LoadingButton, NotifError, NotifInfo, NotifSuccess, NotifWarning, TemporaryNotif, TextArea, TextInput } from "../components/Elements";
 import useFetch from "../hooks/useFetch";
 import { deviceWidthEnum, isValidURL, loginToken } from "../helpers/utils";
@@ -92,6 +92,8 @@ const readCreateAppFormDraft = (key) => {
 
 
 function CreateAppsForm() {
+    const { me } = useRouteLoaderData("root");
+    console.log(me);
     const location = useLocation();
     const [appCreateData, setAppCreateData] = useState(getCreateAppFormDraft() || {});
     const [app_description_textarea_value, setAppDescriptionValue] = useState();
@@ -475,7 +477,7 @@ function CreateAppsForm() {
                 onSubmit={(event) => submitNewAppForm(event)}>
                 <input type="hidden" name="csrf_token" />
                 {
-                    isLoggedIn && tokenData?.is_verified !== undefined && !tokenData?.is_verified
+                    isLoggedIn && me?.data?.is_verified !== undefined && !me?.data?.is_verified
                         ? <div className={"sticky top-0 flex flex-row items-center p-2 bg-warning/25 backdrop-blur z-50 lg:justify-center"}>
                             <span>
                                 Kindly verify your account to register your app on Nine.
@@ -834,7 +836,7 @@ function CreateAppsForm() {
                             <PageSwitchHeader>Add Links to download your app</PageSwitchHeader>
                             <div className={"p-4 space-y-8"}>
                                 {
-                                    !tokenData?.is_verified
+                                    !me?.data?.is_verified
                                     && <NotifWarning title={"You are not logged in."}>
                                         <div>You need to login to list your app</div>
                                         Go back and login. Your draft will be saved for you.
@@ -896,7 +898,7 @@ function CreateAppsForm() {
                                 <Button
                                     type={"submit"}
                                     classes={"btn-success btn-wide h-14 disabled:bg-green-300 disabled:text-success-content disabled:bg-opacity-80 dark:disabled:bg-success dark:disabled:text-success-content"}
-                                    disabled={!(appLinksValid && tokenData?.is_verified)}
+                                    disabled={!(appLinksValid && me?.data?.is_verified)}
                                     onClick={() => { showLoadingState(); deleteCreateFormDraft() }}
                                 >
                                     {isSubmit ? <LoadingButton>Listing...</LoadingButton> : "Create"}

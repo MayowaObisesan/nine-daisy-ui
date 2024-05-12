@@ -12,3 +12,11 @@ export const brandColorMap = {
     "facebook": "text-blue-500",
     "pinterest": "text-red-600",
 };
+
+export const releaseType = [
+    "UNDER_CONSTRUCTION",
+    "IN_DEVELOPMENT",
+    "ALPHA",
+    "BETA",
+    "LIVE"
+]

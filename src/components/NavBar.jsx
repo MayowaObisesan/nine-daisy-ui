@@ -51,15 +51,15 @@ const NavBar = ({ header, showAddAppButton = false, hideSearch = false, hideProf
                         !hideProfile &&
                         <label tabIndex={0} htmlFor="profile-dropdown" className={"flex flex-row items-center"}>
                             <Avatar
-                                src={tokenData.tokenData?.dp}
+                                src={tokenData?.dp}
                                 alt={""}
                                 width={"12"}
                                 classes={"btn p-1 w-full *:rounded-full leading-[48px] border-0 bg-neutral hover:bg-accent transition-colors"}
                             >
                                 {
-                                    !tokenData.tokenData?.dp && (
+                                    !tokenData?.dp && (
                                         me.data?.firstname
-                                            ? <div className={""}>{me.data && me.data?.firstname.split("")[0].toUpperCase()}</div>
+                                            ? <div className={"font-bold text-lg"}>{me.data && me.data?.firstname.split("")[0].toUpperCase()}</div>
                                             : <div className={""}></div>
                                     )
                                 }
@@ -68,7 +68,7 @@ const NavBar = ({ header, showAddAppButton = false, hideSearch = false, hideProf
                     }
                     <ul id="profile-dropdown" tabIndex={0} className="mt-3 z-[1] p-2 menu menu-sm dropdown-content bg-white/85 backdrop-blur-md lg:backdrop-blur-xl dark:bg-base-200 rounded-box w-56">
                         {
-                            tokenData?.tokenData?.isLoggedIn
+                            tokenData?.isLoggedIn
                                 ? <>
                                     <li>
                                         <Link to={"/profile"} className="justify-between p-4">

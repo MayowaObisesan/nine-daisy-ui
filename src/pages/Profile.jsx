@@ -417,6 +417,7 @@ export const UserPageComponent = ({ userId, userData }) => {
     // const [userApps] = useFetch(`${process.env.REACT_APP_BASE_URL}/user/${tokenData.tokenData?.user_id}/apps/`);
     const [userApps] = useFetch(`${process.env.REACT_APP_BASE_URL}/user/${userId}/apps/`);
     const [socialSitesList] = useFetch(`${process.env.REACT_APP_BASE_URL}/app/social_list/`);
+    const [timelineList] = useFetch(`${process.env.REACT_APP_BASE_URL}/timeline/`);
 
     return (
         <section className={"profile-container relative bg-light lg:bg-white-solid dark:bg-111314"}>
@@ -641,6 +642,9 @@ export const UserPageComponent = ({ userId, userData }) => {
                             <section>
                                 {/* <!-- Timeline --> */}
                                 <div>
+                                    {/* {
+                                        timelineList.map((eachTimeLine, index) => ())
+                                    } */}
                                     {/* <!-- Heading --> */}
                                     <div class="ps-2 my-2 first:mt-0">
                                         <h3 class="text-xs font-medium uppercase text-gray-500 dark:text-gray-400">
