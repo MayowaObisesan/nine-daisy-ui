@@ -352,7 +352,7 @@ function LatestApps({ listCount, fetchData, fetchMoreData }) {
   return (
     <section id="id-napps-latest-apps-container" className="bg-rose-80 flex-grow w-full m-auto px-2 pb-4 z-10 shadow:0px--20px-80px-20px-FFFFFF88 dark:bg-111314|shadow:0px--20px-80px-20px-11131488" ref={scrollContainerRef}>
       <header id="id-napps-latest-apps-header"
-        className={"lg:w-[88%] text-2xl font-15 font-semibold mx-auto lg:pl-4 pad-y-unset pl-2 h-20 leading-[5rem] text-left text-base-content"}>
+        className={"lg:w-[88%] text-xl font-15 font-semibold mx-auto lg:pl-4 pad-y-unset pl-2 h-20 leading-[5rem] text-left text-base-content"}>
         Latest Apps
         <span className=""></span>
       </header>

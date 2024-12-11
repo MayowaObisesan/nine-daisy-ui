@@ -235,3 +235,76 @@ export function ErrorFallback({ error, resetErrorBoundary }) {
         </div>
     )
 }
+
+
+export const formatDateShort = (time) => {
+    // Create a new Date object
+    const currentDate = new Date(time * 1000);
+
+    // Get hours and minutes
+    const hours = currentDate.getHours();
+    const minutes = currentDate.getMinutes();
+
+    // Determine whether it's AM or PM
+    const amOrPm = hours >= 12 ? 'pm' : 'am';
+
+    // Convert hours to 12-hour format
+    const formattedHours = hours % 12 || 12;
+
+    // Format the time string
+    const formattedTime = `${formattedHours}:${minutes < 10 ? '0' : ''}${minutes} ${amOrPm}`;
+
+    // Log the result
+    // console.log(formattedTime);
+    return formattedTime;
+}
+
+export const formatDate = (time) => {
+    // Convert the timestamp to milliseconds by multiplying it by 1000
+    const date = new Date(time * 1000);
+
+    // Get the year, month, and day components
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1; // Months are zero-based, so add 1 to get the correct month
+    const day = date.getDate();
+    const hrs = date.getHours();
+    const mins = date.getMinutes();
+
+    // Create an array of month names to map the numeric month to its name
+    const monthNames = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+    ];
+
+    // Get the month name using the month value as an index in the monthNames array
+    const monthName = monthNames[month - 1];
+
+    const formattedDate = `${monthName} ${day}, ${year} ${hrs}:${mins}`;
+
+    return formattedDate;
+};
+
+export function formatISOWithTimezone(date) {
+    let tzOffset = -date.getTimezoneOffset();  // Get the timezone offset in minutes
+    let sign = tzOffset >= 0 ? '+' : '-';      // Determine if the offset is positive or negative
+    let pad = (num) => (num < 10 ? '0' : '') + Math.abs(num);  // Helper function to pad numbers to two digits
+
+    // Convert the date to the ISO 8601 format with the timezone offset
+    return date.getFullYear() +
+        '-' + pad(date.getMonth() + 1) +
+        '-' + pad(date.getDate()) +
+        'T' + pad(date.getHours()) +
+        ':' + pad(date.getMinutes()) +
+        ':' + pad(date.getSeconds()) +
+        sign + pad(Math.floor(tzOffset / 60)) + ':' + pad(tzOffset % 60);
+}

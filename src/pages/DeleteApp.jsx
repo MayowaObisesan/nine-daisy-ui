@@ -105,13 +105,13 @@ function DeleteApp() {
             }
 
             {/*<AppBoxes {...appData} hideUser={true}/>*/}
-            <section className={"flex-1 w-full lg:w-[56%] pct:w-96 mx-auto mg-y2 p-8 lh-4 rounded-xl bg-red-inverse radius lg:pct:w-56"}>
+            <section className={"flex-1 w-full lg:w-[56%] pct:w-96 mx-auto mg-y2 p-2 lh-4 rounded-xl bg-red-inverse radius lg:pct:w-56"}>
                 <NotifError title={"Danger"} noTitle>
-                    <div className={"text-lg space-y-4"}>
+                    <div className={"text-lg space-y-2"}>
                         <div><b>This action cannot be undone.</b></div>
                     </div>
                 </NotifError>
-                <section className={"w-[80%] space-y-16 mx-auto my-16"}>
+                <section className={"w-[88%] space-y-12 mx-auto my-8"}>
                     <section className={"space-y-6 text-lg lg:space-y-10 lg:text-xl"}>
                         <div>If you choose to proceed</div>
                         <ul className={"list-decimal space-y-4 ps-5 lg:space-y-8"}>
@@ -134,7 +134,7 @@ function DeleteApp() {
                 This app will no longer be available on Nine once you click the delete button below.
                 <div><b>This action cannot be undone.</b></div> */}
                     {/*Are you sure you want to delete {appData?.name}?*/}
-                    <br />
+                    {/*<br />*/}
 
                     <section className={"block w-full space-y-8 pct:w-100 z-1 lg:px:top-0|pct:w-56|mg-x-auto"}>
                         {/* <FormFields
@@ -163,7 +163,7 @@ function DeleteApp() {
                                 />
                             </LabelField>
                         </FormField>
-                        <section className={"sticky bottom-16 w-full lg:w-[56%] pct:w-100 mx-auto px-4 my-8"}>
+                        <section className={"sticky bottom-0 pct:w-100 pt-4 pb-4 w-full lg:w-[56%] pct:w-100 mx-auto px-4 my-8 bg-white/80 backdrop-blur dark:bg-base-300"}>
                             {/* <button
                     className={"d-block pct:w-100 h-6 lh-6 font-semibold border-0 outline-red outline-offset-2 bg-red color-white cursor-pointer radius disabled:bg-red-inverse|cursor-not-allowed lg:pct:w-40|mg-x-auto"}
                     disabled={appName !== appData?.name}
