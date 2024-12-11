@@ -206,7 +206,7 @@ const LoginForm = () => {
                     </Button>
                 </div>
             </form>
-            <div className={"md:hidden divider w-11/12 mx-auto"}></div>
+            <div className={"md:hidden divider after:h-px before:h-px w-11/12 mx-auto"}></div>
             <div
                 className={"pct:w-96 mg-x-auto text-center lg:w-400"}>
                 Don't have an account? <Link to={"/signup"} className={"font-bold pad-y2 pad-x1 color-initial dark:color-whitesmoke"}>Signup</Link>

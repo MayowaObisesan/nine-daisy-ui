@@ -1,11 +1,12 @@
 import { Link, Outlet, useLoaderData } from "react-router-dom";
-import { HeaderLink, PageHeaderLink } from "../components/Elements";
+import {Button, HeaderLink, PageHeaderLink} from "../components/Elements";
 import React from "react";
 import { deviceWidthEnum, truncateLetters } from "../helpers/utils";
 import { getApp } from "./loaders/appLoaders";
 import { useDeviceSize } from "../hooks/useDeviceSize";
 import NavBar from "../components/NavBar";
 import useTokenData from "../hooks/useTokenData";
+import useFetch from "../hooks/useFetch";
 
 export async function loader({ params }) {
   const app = await getApp(params.appNameId);
@@ -34,7 +35,7 @@ export function UpdateAppsGroups() {
           ? <PageHeaderLink headerTitle={"Update your app"} fixTop={true}>
             {
               appData.owner.id === tokenData?.tokenData?.user_id
-                ? <Link to={`/app/${appData.name_id}/update/new`}
+                ? <Link to={`/app/${appData.name_id}/new`}
                   className={"btn btn-primary absolute right-4 h-10 leading-10 rounded-xl px-4 decoration-none"}>
                   List New Version
                   <span className={"fa fa-upload pl-1"}></span>
@@ -95,6 +96,8 @@ export function UpdateAppsGroups() {
 }
 
 function AppOverview(props) {
+  const [appVersions] = useFetch(`${process.env.REACT_APP_BASE_URL}/app/version/`);
+
   return (
     <section className={"bg-white bg-light rounded-t-2xl px-2 pt-2 pb-8 lg:p-8 lg:pad-unset dark:bg-111314 dark:bg-base-300"}>
       <section className={"flex flex-col lg:grid lg:grid-cols-3 gap-y-8 lg:grid-flow-row lg:gap-x-8 lg:gap-y-8"}>
@@ -215,6 +218,30 @@ function AppOverview(props) {
               <span
                 className="fa fa-link w-12 h-12 leading-[48px] square-6 lh-6 text-2xl font-18 color-444 dark:color-darkgray"></span>{props.external_link ? "External download link" : "-"}
 
+            </div>
+          </section>
+        </div>
+
+        {/* App versions */}
+        <div className={"card card-bordered bg-base-100 bg-white-solid dark:bg-111314BB"}>
+          <HeaderLink headerTitle={"App Versions"} showArrow={true} linkUrl={"versions"} classes={"px-2 py-4 lg:p-4"} />
+          <section className={"space-y-2 px-2 lg:px-4 every:d-block|pad-2"}>
+            {
+              appVersions?.results.slice(0, 4).map((eachAppVersion, index) => (
+                <div key={index} id="id-app-versions"
+                     className={"flex flex-row items-center p-4 color-initial lg:text-xl lg:font-14 dark:color-whitesmoke"}>
+                  <div className="leading-tight">
+                    <div className={"text-sm font-bold"}>{eachAppVersion.release_type} release on {new Date(eachAppVersion.release_date).toLocaleDateString()}</div>
+                    <div className={"text-[15px]"}>{truncateLetters(eachAppVersion.latest_feature, 0, 70)}</div>
+                  </div>
+                  <span
+                    className="w-12 h-12 leading-[48px] square-6 lh-6 text-base font-bold font-18 color-444 dark:color-darkgray">{eachAppVersion?.version}</span>
+                </div>
+              ))
+            }
+            <div id="id-app-download-links"
+              className={"flex flex-row items-center p-4 color-initial lg:text-xl lg:font-14 dark:color-whitesmoke"}>
+              <Button classes={"w-full"}>Show all</Button>
             </div>
           </section>
         </div>

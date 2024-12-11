@@ -85,7 +85,7 @@ export const Avatar = ({ type, badge, width, src, alt, classes = "", children })
         <div className={`avatar ${badgeClassName} ${children && "placeholder"}`}>
             {
                 children
-                    ? <div className={`bg-neutral hover:bg-accent text-accent-content rounded-full ${defaultClasses}`}>
+                    ? <div className={`bg-base-300 hover:bg-base-200 text-accent-content rounded-full ${defaultClasses}`}>
                         {children}
                     </div>
                     : <div className={`${defaultClasses} w-full`}>
@@ -241,8 +241,8 @@ export const PageHeaderLink = ({ headerTitle, showArrow, linkUrl, fixTop, noFix,
                         linkUrl === undefined || linkUrl === ""
                             ? <button type={"button"}
                                 className="block w-16 h-16 square-8 lh-9 border-0 bg-initial color-initial text-center z-10 decoration-none dark:color-whitesmoke"
-                                // onClick={() => window.history.back()}
-                                onClick={() => navigate(-1)}
+                                onClick={() => window.history.back()}
+                                // onClick={() => navigate(-1)} // DO NOT USE. CAUSES MULTIPLE RE-FETCHES
                             >
                                 <span className="fa fa-angle-left text-xl font-18 color-999"></span>
                             </button>

@@ -167,7 +167,8 @@ const Search = () => {
                             type={"button"}
                             id="id-modes-navigation-close-trigger"
                             classes={"btn-ghost hover:bg-base-300 dark:bg-transparent dark:hover:bg-base-100 fa fa-arrow-left size-16 leading-[64px] rounded-xl text-xl"}
-                            onClick={() => navigate(-1)}
+                            onClick={() => window.history.back()}
+                            // onClick={() => navigate(-1)}
                         ></Button>
                         {/* <LabelField classes={"space-y-0 p-0 w-full"}>
                         </LabelField> */}
